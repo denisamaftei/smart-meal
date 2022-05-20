@@ -6,7 +6,7 @@
           <div class="signIn-message">Recover your password</div>
         </div>
         <div class="login-inputs">
-          <EmailInput class="email-input"></EmailInput>
+          <SimpleInput class="email-input"></SimpleInput>
           <PasswordInput></PasswordInput>
           <PasswordInput label="New Password"></PasswordInput>
           <PasswordInput label="Confirm New Password"></PasswordInput>
@@ -24,11 +24,11 @@
   </q-page-container>
 </template>
 <script>
-import EmailInput from "../components/EmailInput.vue";
+import SimpleInput from "../components/SimpleInput.vue";
 import PasswordInput from "../components/PasswordInput.vue";
 import ConnectButton from "../components/ConnectButton.vue";
 export default {
-  components: { EmailInput, PasswordInput, ConnectButton },
+  components: { SimpleInput, PasswordInput, ConnectButton },
 };
 </script>
 <style lang="scss" scoped>

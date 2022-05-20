@@ -7,7 +7,7 @@
           <div class="welcome-message">Hi, there! Nice to see you again.</div>
         </div>
         <div class="login-inputs">
-          <EmailInput></EmailInput>
+          <SimpleInput></SimpleInput>
           <PasswordInput></PasswordInput>
         </div>
         <div class="buttons-container">
@@ -47,17 +47,16 @@
   </q-page-container>
 </template>
 <script>
-import EmailInput from "../components/EmailInput.vue";
+import SimpleInput from "../components/SimpleInput.vue";
 import PasswordInput from "../components/PasswordInput.vue";
 import ConnectButton from "../components/ConnectButton.vue";
 export default {
-  components: { EmailInput, PasswordInput, ConnectButton },
+  components: { SimpleInput, PasswordInput, ConnectButton },
 };
 </script>
 <style lang="scss" scoped>
 .login-container {
   padding-top: 0px !important;
-
 }
 .q-btn {
   text-transform: none;

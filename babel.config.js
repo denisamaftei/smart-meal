@@ -9,7 +9,7 @@ module.exports = (api) => {
           ? { targets: { node: "current" } }
           : {},
       ],
-      ["env"],
+      ["@babel/preset-env"],
     ],
     plugins: ["@vue/babel-plugin-jsx"],
   };

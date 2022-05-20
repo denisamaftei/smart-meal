@@ -11,12 +11,9 @@
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
+    "@babel/preset-env": "^7.17.10",
     "@quasar/extras": "^1.0.0",
     "axios": "^0.21.1",
-    "babel-helper-vue-jsx-merge-props": "^2.0.3",
-    "babel-plugin-syntax-jsx": "^6.18.0",
-    "babel-plugin-transform-vue-jsx": "^3.7.0",
-    "babel-preset-env": "^1.7.0",
     "core-js": "^3.6.5",
     "pinia": "^2.0.11",
     "quasar": "^2.6.0",

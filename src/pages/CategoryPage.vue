@@ -43,7 +43,7 @@
     <q-footer>
       <div class="back-container">
         <q-btn round color="info" icon="arrow_back" to="/" />
-        Back to your Fridge
+        <span class="back-text">Back to your Fridge</span>
       </div>
     </q-footer>
   </q-layout>
@@ -63,11 +63,12 @@ export default {
       $q.dialog({
         title: "",
         message: message,
-        style: "border-radius:10px",
-        class: "justify-around",
+        style: "border-radius:10px;",
+        align: "center",
 
         ok: {
           push: true,
+          label: "delete",
         },
         cancel: {
           push: true,
@@ -105,6 +106,8 @@ export default {
 .list-head {
   display: flex;
   padding-left: 12%;
+  color: #f78250;
+  padding-top: 5%;
   /* justify-content: center; */
   /* margin-left: ; */
 }
@@ -134,5 +137,16 @@ export default {
 }
 .justify-end {
   justify-content: space-around !important;
+}
+.q-card > div {
+  display: flex !important;
+  flex-direction: row-reverse !important;
+  justify-content: space-between !important;
+}
+
+.back-text {
+  color: #f78250;
+  font-weight: 900;
+  padding-left: 2%;
 }
 </style>
