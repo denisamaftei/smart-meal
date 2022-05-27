@@ -2,6 +2,13 @@
   <q-page-container class="newProductPage-container">
     <div class="q-pa-md row justify-center">
       <q-layout view="lHh Lpr lFf">
+        <q-header>
+          <div class="q-pa-md">
+            <div class="q-gutter-md">
+              <img src="../assets/Logo.svg" />
+            </div>
+          </div>
+        </q-header>
         <div class="page-title">Add Product</div>
         <div class="inputs-container">
           <div class="input-title">Product Name</div>
@@ -30,6 +37,7 @@
         />
         <div class="input-title">Category</div>
         <q-select
+          behavior="menu"
           class="product-input"
           bg-color="info"
           clearable
@@ -51,8 +59,7 @@
         </q-select>
 
         <div class="add-container">
-          <q-btn class="done-btn" round color="info" icon="check" to="/" />
-          <span class="add-text">Done!</span>
+          <q-btn class="done-btn" color="primary" round icon="check" to="/" />
         </div>
       </q-layout>
     </div>
@@ -87,8 +94,7 @@ export default {
   color: #f78250;
   font-size: 2.5em;
   font-weight: 800;
-  padding-left: 16px;
-  // padding-bottom: 7%;
+  padding-top: 10vh;
 }
 .q-page-container {
   padding-top: 0 !important;
@@ -111,7 +117,7 @@ export default {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  padding-top: 15%;
+  padding-top: 25%;
 }
 .q-icon,
 .material-icons,
@@ -124,11 +130,12 @@ export default {
 }
 .done-btn {
   font-size: 1.2em;
+  // border-radius: 10px;
 }
 </style>
 <style lang="scss">
 .q-field--filled .q-field__control {
-  border-radius: 25px !important;
+  border-radius: 10px !important;
 }
 .q-field--filled.q-field--highlighted .q-field__control:after {
   margin-left: 7% !important;

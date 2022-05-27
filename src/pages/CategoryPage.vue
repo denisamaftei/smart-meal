@@ -1,52 +1,54 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header>
-      <div class="q-pa-md">
-        <div class="q-gutter-md">
-          <img src="../assets/Logo.svg" />
+  <div class="q-pa-md row justify-center">
+    <q-layout view="lHh Lpr lFf">
+      <q-header>
+        <div class="q-pa-md">
+          <div class="q-gutter-md">
+            <img src="../assets/Logo.svg" />
+          </div>
+        </div>
+      </q-header>
+      <div class="page-title">Frozen Products</div>
+      <div class="list-container">
+        <div class="list-head">
+          <div class="products-name">Name</div>
+          <div>Expiration Date</div>
+        </div>
+        <div>
+          <q-list class="list">
+            <q-item clickable v-ripple class="list-item">
+              <q-item-section class="product-name">Fish</q-item-section>
+              <q-item-section>20/12/2021</q-item-section>
+              <q-item-section @click="alert()" avatar>
+                <q-icon color="black" name="disabled_by_default" />
+              </q-item-section>
+            </q-item>
+            <q-item clickable v-ripple class="list-item">
+              <q-item-section class="product-name">Chicken</q-item-section>
+              <q-item-section>20/12/2021</q-item-section>
+              <q-item-section @click="alert()" avatar>
+                <q-icon color="black" name="disabled_by_default" />
+              </q-item-section>
+            </q-item>
+            <q-item clickable v-ripple class="list-item">
+              <q-item-section class="product-name">Spinach</q-item-section>
+              <q-item-section>20/12/2021</q-item-section>
+              <q-item-section @click="alert()" avatar>
+                <q-icon color="black" name="disabled_by_default" />
+              </q-item-section>
+            </q-item>
+          </q-list>
         </div>
       </div>
-    </q-header>
-    <div class="page-title">Frozen Products</div>
-    <div class="list-container">
-      <div class="list-head">
-        <div class="products-name">Name</div>
-        <div>Expiration Date</div>
-      </div>
-      <div>
-        <q-list class="list">
-          <q-item clickable v-ripple class="list-item">
-            <q-item-section class="product-name">Fish</q-item-section>
-            <q-item-section>20/12/2021</q-item-section>
-            <q-item-section @click="alert()" avatar>
-              <q-icon color="black" name="disabled_by_default" />
-            </q-item-section>
-          </q-item>
-          <q-item clickable v-ripple class="list-item">
-            <q-item-section class="product-name">Chicken</q-item-section>
-            <q-item-section>20/12/2021</q-item-section>
-            <q-item-section @click="alert()" avatar>
-              <q-icon color="black" name="disabled_by_default" />
-            </q-item-section>
-          </q-item>
-          <q-item clickable v-ripple class="list-item">
-            <q-item-section class="product-name">Spinach</q-item-section>
-            <q-item-section>20/12/2021</q-item-section>
-            <q-item-section @click="alert()" avatar>
-              <q-icon color="black" name="disabled_by_default" />
-            </q-item-section>
-          </q-item>
-        </q-list>
-      </div>
-    </div>
 
-    <q-footer>
-      <div class="back-container">
-        <q-btn round color="info" icon="arrow_back" to="/" />
-        <span class="back-text">Back to your Fridge</span>
-      </div>
-    </q-footer>
-  </q-layout>
+      <q-footer>
+        <div class="back-container">
+          <q-btn round color="info" icon="arrow_back" to="/" />
+          <span class="back-text">Back to your Fridge</span>
+        </div>
+      </q-footer>
+    </q-layout>
+  </div>
 </template>
 <script>
 import { useQuasar } from "quasar";
@@ -65,7 +67,6 @@ export default {
         message: message,
         style: "border-radius:10px;",
         align: "center",
-
         ok: {
           push: true,
           label: "delete",
@@ -100,8 +101,7 @@ export default {
   color: #f78250;
   font-size: 2.5em;
   font-weight: 800;
-  margin-top: 20%;
-  padding-left: 16px;
+  padding-top: 10vh;
 }
 .list-head {
   display: flex;

@@ -30,7 +30,11 @@ const routes = [
     path: "/auth",
     component: () => import("layouts/AuthLayout.vue"),
     children: [
-      { path: "/login", component: () => import("pages/LoginPage.vue") },
+      {
+        path: "/login",
+        component: () => import("pages/LoginPage.vue"),
+        name: "Login",
+      },
       {
         path: "/register",
         component: () => import("pages/NewAccount.vue"),

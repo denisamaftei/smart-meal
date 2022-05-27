@@ -1,25 +1,29 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header>
-      <div class="q-pa-md">
-        <div class="q-gutter-md">
-          <img src="../assets/Logo.svg" />
-        </div>
-      </div>
-    </q-header>
-    <div class="page-title">Expiring Soon</div>
-    <q-table
-      class="expiring-table"
-      :rows="rows"
-      row-key="name"
-      :virtual-scroll-item-size="48"
-      :virtual-scroll-sticky-size-start="48"
-      :pagination="pagination"
-      :rows-per-page-options="[0]"
-      @virtual-scroll="onScroll"
-      hide-pagination
-    />
-  </q-layout>
+  <q-page-container class="expiringProductsPage-container">
+    <div class="q-pa-md row justify-center">
+      <q-layout view="lHh Lpr lFf">
+        <q-header>
+          <div class="q-pa-md">
+            <div class="q-gutter-md">
+              <img src="../assets/Logo.svg" />
+            </div>
+          </div>
+        </q-header>
+        <div class="page-title">Expiring Soon</div>
+        <q-table
+          class="expiring-table"
+          :rows="rows"
+          row-key="name"
+          :virtual-scroll-item-size="48"
+          :virtual-scroll-sticky-size-start="48"
+          :pagination="pagination"
+          :rows-per-page-options="[0]"
+          @virtual-scroll="onScroll"
+          hide-pagination
+        />
+      </q-layout>
+    </div>
+  </q-page-container>
 </template>
 <script>
 const rows = [
@@ -85,8 +89,7 @@ export default {
   color: #f78250;
   font-size: 2.5em;
   font-weight: 800;
-  margin-top: 6%;
-  padding-left: 16px;
+  padding-top: 10vh;
 }
 .q-table__container {
   margin-left: 5%;
@@ -99,6 +102,9 @@ export default {
 .q-table thead {
   color: #f78250;
   font-weight: 900;
+}
+.q-table th {
+  padding: 0%;
 }
 .text-left {
   text-align: center;

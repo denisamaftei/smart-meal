@@ -1,77 +1,89 @@
 <template>
   <q-page-container class="homePage-container">
     <div class="q-pa-md row justify-center">
-      <div class="page-title">Your Fridge</div>
-      <div class="fridge-container">
-        <img class="fridge-svg" src="../assets/Fridge.svg" />
-        <span class="freezer-container products-container">
-          <q-btn class="products-btn" to="/category">
-            <div>
-              <img class="frozenProd-svg" src="../assets/FrozenProducts.svg" />
-            </div>
-            <div class="products-category">
-              <div>Frozen</div>
-              Products
-            </div>
-          </q-btn>
-        </span>
-        <span class="topLevel-container">
-          <div class="products-container">
-            <img src="../assets/Sweets.svg" />
-            <div class="products-category">
-              <div>Sweets</div>
-              & Snacks
+      <q-layout view="lHh Lpr lFf">
+        <q-header>
+          <div class="q-pa-md">
+            <div class="q-gutter-md">
+              <img src="../assets/Logo.svg" />
             </div>
           </div>
-          <div class="products-container">
-            <img src="../assets/MeatProducts.svg" />
-            <div class="products-category">
-              <div>Meat</div>
-              Products
+        </q-header>
+        <div class="page-title">Your Fridge</div>
+        <div class="fridge-container">
+          <img class="fridge-svg" src="../assets/Fridge.svg" />
+          <span class="freezer-container products-container">
+            <q-btn class="products-btn" to="/category">
+              <div>
+                <img
+                  class="frozenProd-svg"
+                  src="../assets/FrozenProducts.svg"
+                />
+              </div>
+              <div class="products-category">
+                <div>Frozen</div>
+                Products
+              </div>
+            </q-btn>
+          </span>
+          <span class="topLevel-container">
+            <div class="products-container">
+              <img src="../assets/Sweets.svg" />
+              <div class="products-category">
+                <div>Sweets</div>
+                & Snacks
+              </div>
             </div>
-          </div>
-          <div class="products-container">
-            <img src="../assets/Drinks.svg" />
-            <div class="products-category">
-              <div>Beverage</div>
-              Products
+            <div class="products-container">
+              <img src="../assets/MeatProducts.svg" />
+              <div class="products-category">
+                <div>Meat</div>
+                Products
+              </div>
             </div>
-          </div>
-        </span>
-        <span class="middleLevel-container">
-          <div class="products-container">
-            <img src="../assets/Dairy.svg" />
-            <div class="products-category">
-              <div>Dairy</div>
-              Products
+            <div class="products-container">
+              <img src="../assets/Drinks.svg" />
+              <div class="products-category">
+                <div>Beverage</div>
+                Products
+              </div>
             </div>
-          </div>
-          <div class="products-container">
-            <img src="../assets/Bakery.svg" />
-            <div class="products-category">
-              <div>Bakery</div>
-              Products
+          </span>
+          <span class="middleLevel-container">
+            <div class="products-container">
+              <img src="../assets/Dairy.svg" />
+              <div class="products-category">
+                <div>Dairy</div>
+                Products
+              </div>
             </div>
-          </div>
-          <div class="products-container">
-            <img src="../assets/Other.svg" />
-            <div class="products-category other-category">
-              <div>Other</div>
-              Products
+            <div class="products-container">
+              <img src="../assets/Bakery.svg" />
+              <div class="products-category">
+                <div>Bakery</div>
+                Products
+              </div>
             </div>
-          </div>
-        </span>
-        <span class="bottomLevel-container">
-          <div class="products-container">
-            <img src="../assets/Fruits.svg" />
-            <div class="products-category">Fruits</div>
-          </div>
-          <div class="products-container">
-            <img src="../assets/Vegetables.svg" />
-            <div class="products-category">Vegetables</div>
-          </div>
-        </span>
-      </div>
+            <div class="products-container">
+              <img src="../assets/Other.svg" />
+              <div class="products-category other-category">
+                <div>Other</div>
+                Products
+              </div>
+            </div>
+          </span>
+          <span class="bottomLevel-container">
+            <div class="products-container">
+              <img src="../assets/Fruits.svg" />
+              <div class="products-category">Fruits</div>
+            </div>
+            <div class="products-container">
+              <img src="../assets/Vegetables.svg" />
+              <div class="products-category">Vegetables</div>
+            </div>
+          </span>
+        </div>
+      </q-layout>
     </div>
   </q-page-container>
 </template>
@@ -80,13 +92,12 @@
   color: #f78250;
   font-size: 2.5em;
   font-weight: 800;
+  width: 100%;
+  padding-top: 10vh;
 }
 .q-page-container {
   padding-top: 0% !important;
   padding-bottom: 7% !important;
-}
-.page-title {
-  width: 100%;
 }
 
 .q-pa-md {

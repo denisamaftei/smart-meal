@@ -1,12 +1,5 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header>
-      <div class="q-pa-md">
-        <div class="q-gutter-md">
-          <img src="../assets/Logo.svg" />
-        </div>
-      </div>
-    </q-header>
     <q-footer elevated>
       <q-tabs v-model="tab">
         <q-route-tab to="/" name="home" icon="kitchen" />
