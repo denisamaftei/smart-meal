@@ -87,6 +87,7 @@
     </div>
   </q-page-container>
 </template>
+<script></script>
 <style lang="scss" scoped>
 .page-title {
   color: #f78250;

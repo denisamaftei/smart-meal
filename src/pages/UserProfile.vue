@@ -51,7 +51,10 @@
             <div class="panel-text">About the application</div>
           </div>
           <q-separator color="secondary" />
-          <div class="icon-text log-out" @click="handleClick">
+          <div
+            class="icon-text log-out"
+            @click="getRecipesCategories(recipesCategories)"
+          >
             <q-icon
               class="fas fa-sign-out-alt icons"
               name="logout"
@@ -80,7 +83,13 @@
 </template>
 <script>
 // import AdContainer from 'components/AdContainer.vue'
+import { useRecipesStore } from "../stores/recipesStore";
 export default {
+  setup() {
+    const recipesStore = useRecipesStore();
+
+    return { getRecipesCategories: recipesStore.getRecipesCategories };
+  },
   components: {
     // AdContainer,
   },
@@ -92,6 +101,7 @@ export default {
   data() {
     return {
       tab: "mails",
+      recipesCategories: "",
     };
   },
 };
