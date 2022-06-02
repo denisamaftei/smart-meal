@@ -5,7 +5,6 @@
     @click="simulateProgress(1)"
     label="Sign in"
     class="connect-btn"
-    to="/"
   />
 </template>
 <script>

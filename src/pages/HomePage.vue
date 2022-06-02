@@ -1,100 +1,131 @@
 <template>
   <q-page-container class="homePage-container">
     <div class="q-pa-md row justify-center">
-      <q-layout view="lHh Lpr lFf">
-        <q-header>
-          <div class="q-pa-md">
-            <div class="q-gutter-md">
-              <img src="../assets/Logo.svg" />
+      <!-- <q-layout view="lHh Lpr lFf"> -->
+      <q-header>
+        <div class="q-pa-md">
+          <div class="q-gutter-md">
+            <img src="../assets/Logo.svg" />
+          </div>
+        </div>
+      </q-header>
+      <div class="page-title">Your Fridge</div>
+      <div class="fridge-container">
+        <img class="fridge-svg" src="../assets/Fridge.svg" />
+        <span class="freezer-container products-container">
+          <q-btn class="products-btn" to="/category">
+            <div>
+              <img class="frozenProd-svg" src="../assets/FrozenProducts.svg" />
+            </div>
+            <div class="products-category">
+              <div>Frozen</div>
+              Products
+            </div>
+          </q-btn>
+        </span>
+        <span class="topLevel-container">
+          <div class="products-container">
+            <img src="../assets/Sweets.svg" />
+            <div class="products-category">
+              <div>Sweets</div>
+              & Snacks
             </div>
           </div>
-        </q-header>
-        <div class="page-title">Your Fridge</div>
-        <div class="fridge-container">
-          <img class="fridge-svg" src="../assets/Fridge.svg" />
-          <span class="freezer-container products-container">
-            <q-btn class="products-btn" to="/category">
-              <div>
-                <img
-                  class="frozenProd-svg"
-                  src="../assets/FrozenProducts.svg"
-                />
-              </div>
-              <div class="products-category">
-                <div>Frozen</div>
-                Products
-              </div>
-            </q-btn>
-          </span>
-          <span class="topLevel-container">
-            <div class="products-container">
-              <img src="../assets/Sweets.svg" />
-              <div class="products-category">
-                <div>Sweets</div>
-                & Snacks
-              </div>
+          <div class="products-container">
+            <img src="../assets/MeatProducts.svg" />
+            <div class="products-category">
+              <div>Meat</div>
+              Products
             </div>
-            <div class="products-container">
-              <img src="../assets/MeatProducts.svg" />
-              <div class="products-category">
-                <div>Meat</div>
-                Products
-              </div>
+          </div>
+          <div class="products-container">
+            <img src="../assets/Drinks.svg" />
+            <div class="products-category">
+              <div>Beverage</div>
+              Products
             </div>
-            <div class="products-container">
-              <img src="../assets/Drinks.svg" />
-              <div class="products-category">
-                <div>Beverage</div>
-                Products
-              </div>
+          </div>
+        </span>
+        <span class="middleLevel-container">
+          <div class="products-container">
+            <img src="../assets/Dairy.svg" />
+            <div class="products-category">
+              <div>Dairy</div>
+              Products
             </div>
-          </span>
-          <span class="middleLevel-container">
-            <div class="products-container">
-              <img src="../assets/Dairy.svg" />
-              <div class="products-category">
-                <div>Dairy</div>
-                Products
-              </div>
+          </div>
+          <div class="products-container">
+            <img src="../assets/Bakery.svg" />
+            <div class="products-category">
+              <div>Bakery</div>
+              Products
             </div>
-            <div class="products-container">
-              <img src="../assets/Bakery.svg" />
-              <div class="products-category">
-                <div>Bakery</div>
-                Products
-              </div>
+          </div>
+          <div class="products-container">
+            <img src="../assets/Other.svg" />
+            <div class="products-category other-category">
+              <div>Other</div>
+              Products
             </div>
-            <div class="products-container">
-              <img src="../assets/Other.svg" />
-              <div class="products-category other-category">
-                <div>Other</div>
-                Products
-              </div>
-            </div>
-          </span>
-          <span class="bottomLevel-container">
-            <div class="products-container">
-              <img src="../assets/Fruits.svg" />
-              <div class="products-category">Fruits</div>
-            </div>
-            <div class="products-container">
-              <img src="../assets/Vegetables.svg" />
-              <div class="products-category">Vegetables</div>
-            </div>
-          </span>
-        </div>
-      </q-layout>
+          </div>
+        </span>
+        <span class="bottomLevel-container">
+          <div class="products-container">
+            <img src="../assets/Fruits.svg" />
+            <div class="products-category">Fruits</div>
+          </div>
+          <div class="products-container">
+            <img src="../assets/Vegetables.svg" />
+            <div class="products-category">Vegetables</div>
+          </div>
+        </span>
+      </div>
+      <!-- </q-layout> -->
     </div>
   </q-page-container>
 </template>
-<script></script>
+<script>
+// import firebaseConfig from "../firebase";
+// import { useRouter } from "vue-router";
+// const router = useRouter();
+// let self = this;
+// const authListener = firebaseConfig.projectAuth.onAuthStateChanged((user) => {
+//   if (!user) {
+//     // not logged in
+//     router.push("/login");
+//     console.log(user);
+
+//     alert("you must be logged in to view this. redirecting to the home page");
+//   } else {
+//     console.log(user);
+//   }
+// });
+// export default {
+//   onMounted() {
+//     authListener(user);
+//   },
+// };
+// router.beforeEach((to, from, next) => {
+//   if (to.matched.some((record) => record.meta.authRequired)) {
+//     if (firebaseConfig.projectAuth().currentUser) {
+//       next();
+//     } else {
+//       alert("You must be logged in to see this page");
+//       next({
+//         path: "/login",
+//       });
+//     }
+//   } else {
+//     next();
+//   }
+// });
+</script>
 <style lang="scss" scoped>
 .page-title {
   color: #f78250;
   font-size: 2.5em;
   font-weight: 800;
   width: 100%;
-  padding-top: 10vh;
 }
 .q-page-container {
   padding-top: 0% !important;
@@ -169,5 +200,11 @@
 .other-category {
   position: absolute;
   top: 55%;
+}
+.q-layout {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 </style>

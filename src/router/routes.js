@@ -3,28 +3,49 @@ const routes = [
     path: "/",
     component: () => import("layouts/MainLayout.vue"),
     children: [
-      { path: "", component: () => import("pages/HomePage.vue") },
+      {
+        path: "",
+        component: () => import("pages/HomePage.vue"),
+        meta: {
+          authRequired: true,
+        },
+      },
       {
         path: "/expiringSoon",
         component: () => import("pages/ExpiringProducts.vue"),
+        meta: {
+          authRequired: true,
+        },
       },
       {
         path: "/recipes",
         component: () => import("pages/RecipesPage.vue"),
+        meta: {
+          authRequired: true,
+        },
       },
       {
         path: "/newProduct",
         component: () => import("pages/NewProduct.vue"),
+        meta: {
+          authRequired: true,
+        },
       },
       {
         path: "/profile",
         component: () => import("pages/UserProfile.vue"),
+        meta: {
+          authRequired: true,
+        },
       },
     ],
   },
   {
     path: "/category",
     component: () => import("pages/CategoryPage.vue"),
+    meta: {
+      authRequired: true,
+    },
   },
   {
     path: "/auth",

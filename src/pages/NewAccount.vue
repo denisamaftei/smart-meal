@@ -24,11 +24,11 @@
           <div class="signUp-message">Create your account</div>
         </div>
         <div class="login-inputs">
-          <SimpleInput></SimpleInput>
-          <PasswordInput></PasswordInput>
+          <SimpleInput v-model="form.email"></SimpleInput>
+          <PasswordInput v-model="form.password"></PasswordInput>
         </div>
         <div class="buttons-container">
-          <ConnectButton label="Continue" to="/login"></ConnectButton>
+          <ConnectButton label="Continue" @click="submit()"></ConnectButton>
           <div class="termsAndPolicy-container">
             <q-checkbox
               v-model="customModel"
@@ -103,6 +103,8 @@ import SimpleInput from "../components/SimpleInput.vue";
 import PasswordInput from "../components/PasswordInput.vue";
 import ConnectButton from "../components/ConnectButton.vue";
 import { ref } from "vue";
+import firebaseConfig from "../firebase";
+
 export default {
   components: { SimpleInput, PasswordInput, ConnectButton },
   setup() {
@@ -111,6 +113,30 @@ export default {
       termsAlert: ref(false),
       policyAlert: ref(false),
     };
+  },
+  data() {
+    return {
+      form: {
+        email: "",
+        password: "",
+      },
+      error: null,
+    };
+  },
+  methods: {
+    submit() {
+      console.log("submit");
+      firebaseConfig.projectAuth
+        .createUserWithEmailAndPassword(this.form.email, this.form.password)
+        .then((data) => {
+          console.log("Successfully registered!");
+          this.$router.push("Login");
+        })
+        .catch((error) => {
+          console.log(error.code);
+          alert(error.message);
+        });
+    },
   },
 };
 </script>

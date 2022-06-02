@@ -51,10 +51,7 @@
             <div class="panel-text">About the application</div>
           </div>
           <q-separator color="secondary" />
-          <div
-            class="icon-text log-out"
-            @click="getRecipesCategories(recipesCategories)"
-          >
+          <div class="icon-text log-out" @click="logout()">
             <q-icon
               class="fas fa-sign-out-alt icons"
               name="logout"
@@ -84,6 +81,16 @@
 <script>
 // import AdContainer from 'components/AdContainer.vue'
 import { useRecipesStore } from "../stores/recipesStore";
+import { ref, watchEffect } from "vue";
+import firebaseConfig from "../firebase";
+const isLoggedIn = ref(true);
+firebaseConfig.projectAuth.onAuthStateChanged(function (user) {
+  if (user) {
+    isLoggedIn.value = true; // if we have a user
+  } else {
+    isLoggedIn.value = false; // if we do not
+  }
+});
 export default {
   setup() {
     const recipesStore = useRecipesStore();
@@ -94,8 +101,17 @@ export default {
     // AdContainer,
   },
   methods: {
-    handleClick() {
-      this.$router.push({ name: "Login" });
+    logout() {
+      console.log("logout");
+      firebaseConfig.projectAuth
+        .signOut()
+        .then(() => {
+          console.log(firebaseConfig.projectAuth.currentUser);
+          this.$router.push("/Login");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
   },
   data() {

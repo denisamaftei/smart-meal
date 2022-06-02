@@ -7,11 +7,11 @@
           <div class="welcome-message">Hi, there! Nice to see you again.</div>
         </div>
         <div class="login-inputs">
-          <SimpleInput></SimpleInput>
-          <PasswordInput></PasswordInput>
+          <SimpleInput v-model="form.email"></SimpleInput>
+          <PasswordInput v-model="form.password"></PasswordInput>
         </div>
         <div class="buttons-container">
-          <ConnectButton></ConnectButton>
+          <ConnectButton @click="signIn()"></ConnectButton>
           <div class="socialProfile-message">
             or use one of your social profile
           </div>
@@ -50,8 +50,49 @@
 import SimpleInput from "../components/SimpleInput.vue";
 import PasswordInput from "../components/PasswordInput.vue";
 import ConnectButton from "../components/ConnectButton.vue";
+import { ref } from "vue";
+import firebaseConfig from "../firebase";
+
+const errMsg = ref();
 export default {
   components: { SimpleInput, PasswordInput, ConnectButton },
+  data() {
+    return {
+      form: {
+        email: "",
+        password: "",
+      },
+      error: null,
+    };
+  },
+  methods: {
+    signIn() {
+      console.log("signIn");
+      firebaseConfig.projectAuth
+        .signInWithEmailAndPassword(this.form.email, this.form.password)
+        .then((data) => {
+          console.log("Successfully LoggedIn!");
+          this.$router.push("/");
+          console.log(firebaseConfig.projectAuth.currentUser);
+        })
+        .catch((error) => {
+          switch (error.code) {
+            case "auth/invalid-email":
+              errMsg.value = "Invalid email";
+              break;
+            case "auth/user-not-found":
+              errMsg.value = "No account with that email was found";
+              break;
+            case "auth/wrong-password":
+              errMsg.value = "Incorrect password";
+              break;
+            default:
+              errMsg.value = "Email or password was incorrect";
+              break;
+          }
+        });
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
