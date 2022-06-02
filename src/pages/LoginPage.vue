@@ -7,8 +7,22 @@
           <div class="welcome-message">Hi, there! Nice to see you again.</div>
         </div>
         <div class="login-inputs">
-          <SimpleInput v-model="form.email"></SimpleInput>
-          <PasswordInput v-model="form.password"></PasswordInput>
+          <SimpleInput
+            :rules="[
+              (val) =>
+                (val &&
+                  val.length > 0 &&
+                  val.match(
+                    /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/
+                  )) ||
+                'You must enter a valid email',
+            ]"
+            v-model="form.email"
+          ></SimpleInput>
+          <PasswordInput
+            :rules="[(val) => (val && val.length >= 6) || 'Incorrect password']"
+            v-model="form.password"
+          ></PasswordInput>
         </div>
         <div class="buttons-container">
           <ConnectButton @click="signIn()"></ConnectButton>
@@ -52,8 +66,12 @@ import PasswordInput from "../components/PasswordInput.vue";
 import ConnectButton from "../components/ConnectButton.vue";
 import { ref } from "vue";
 import firebaseConfig from "../firebase";
+import { useQuasar } from "quasar";
 
+const passwordError = "";
+const emailError = "";
 const errMsg = ref();
+
 export default {
   components: { SimpleInput, PasswordInput, ConnectButton },
   data() {
@@ -63,6 +81,17 @@ export default {
         password: "",
       },
       error: null,
+    };
+  },
+  setup() {
+    const $q = useQuasar();
+    return {
+      triggerNegative() {
+        $q.notify({
+          type: "negative",
+          message: "Email or password incorrect.",
+        });
+      },
     };
   },
   methods: {
@@ -79,15 +108,19 @@ export default {
           switch (error.code) {
             case "auth/invalid-email":
               errMsg.value = "Invalid email";
+              this.triggerNegative();
               break;
             case "auth/user-not-found":
               errMsg.value = "No account with that email was found";
+              this.triggerNegative();
               break;
             case "auth/wrong-password":
               errMsg.value = "Incorrect password";
+              this.triggerNegative();
               break;
             default:
               errMsg.value = "Email or password was incorrect";
+              this.triggerNegative();
               break;
           }
         });

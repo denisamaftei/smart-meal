@@ -6,13 +6,13 @@
           <div class="signIn-message">Recover your password</div>
         </div>
         <div class="login-inputs">
-          <SimpleInput class="email-input"></SimpleInput>
-          <PasswordInput></PasswordInput>
-          <PasswordInput label="New Password"></PasswordInput>
-          <PasswordInput label="Confirm New Password"></PasswordInput>
+          <SimpleInput v-model="form.email" class="email-input"></SimpleInput>
         </div>
         <div class="buttons-container">
-          <ConnectButton label="Change password"></ConnectButton>
+          <ConnectButton
+            @click="submit()"
+            label="Reset your password"
+          ></ConnectButton>
           <div class="account">
             <q-btn class="account-btn back-btn" to="/login"
               >Back to sign in.</q-btn
@@ -27,8 +27,52 @@
 import SimpleInput from "../components/SimpleInput.vue";
 import PasswordInput from "../components/PasswordInput.vue";
 import ConnectButton from "../components/ConnectButton.vue";
+import firebaseConfig from "../firebase";
+import { useQuasar } from "quasar";
 export default {
-  components: { SimpleInput, PasswordInput, ConnectButton },
+  setup() {
+    const $q = useQuasar();
+    return {
+      triggerNegative() {
+        $q.notify({
+          type: "negative",
+          message: "No account with that email was found",
+        });
+      },
+    };
+  },
+  data() {
+    return {
+      form: {
+        email: "",
+        password: "",
+      },
+      error: false,
+      emailSending: false,
+    };
+  },
+  components: { SimpleInput, ConnectButton },
+  methods: {
+    submit() {
+      console.log("submit");
+      // if (!this.email) {
+      //   this.triggerNegative();
+      // }
+      firebaseConfig.projectAuth
+        .sendPasswordResetEmail(this.form.email)
+        .then((data) => {
+          console.log("Successfully registered!");
+          this.emailSending = false;
+          this.$router.push("Login");
+        })
+        .catch((err) => {
+          this.emailSending = false;
+          this.triggerNegative();
+
+          this.error = true;
+        });
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

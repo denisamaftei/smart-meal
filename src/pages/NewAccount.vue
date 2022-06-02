@@ -24,8 +24,15 @@
           <div class="signUp-message">Create your account</div>
         </div>
         <div class="login-inputs">
-          <SimpleInput v-model="form.email"></SimpleInput>
-          <PasswordInput v-model="form.password"></PasswordInput>
+          <SimpleInput v-model="form.email" ref="emailInput"></SimpleInput>
+          <PasswordInput
+            :rules="[
+              (val) =>
+                (val && val.length >= 6) ||
+                'Password must have at least 6 characters',
+            ]"
+            v-model="form.password"
+          ></PasswordInput>
         </div>
         <div class="buttons-container">
           <ConnectButton label="Continue" @click="submit()"></ConnectButton>
@@ -104,14 +111,21 @@ import PasswordInput from "../components/PasswordInput.vue";
 import ConnectButton from "../components/ConnectButton.vue";
 import { ref } from "vue";
 import firebaseConfig from "../firebase";
-
+import { useQuasar } from "quasar";
 export default {
   components: { SimpleInput, PasswordInput, ConnectButton },
   setup() {
+    const $q = useQuasar();
     return {
       customModel: ref("no"),
       termsAlert: ref(false),
       policyAlert: ref(false),
+      triggerNegative() {
+        $q.notify({
+          type: "negative",
+          message: "You must agree with the Terms and Polices",
+        });
+      },
     };
   },
   data() {
@@ -120,22 +134,25 @@ export default {
         email: "",
         password: "",
       },
-      error: null,
+      error: false,
     };
   },
   methods: {
     submit() {
       console.log("submit");
-      firebaseConfig.projectAuth
-        .createUserWithEmailAndPassword(this.form.email, this.form.password)
-        .then((data) => {
-          console.log("Successfully registered!");
-          this.$router.push("Login");
-        })
-        .catch((error) => {
-          console.log(error.code);
-          alert(error.message);
-        });
+      if (this.customModel === "yes") {
+        firebaseConfig.projectAuth
+          .createUserWithEmailAndPassword(this.form.email, this.form.password)
+          .then((data) => {
+            console.log("Successfully registered!");
+            this.$router.push("Login");
+          })
+          .catch((err) => {
+            this.error = true;
+          });
+      } else {
+        this.triggerNegative();
+      }
     },
   },
 };
