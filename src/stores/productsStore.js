@@ -1,56 +1,79 @@
 import { defineStore } from "pinia";
-import Axios from "axios";
+import { uuid } from "vue-uuid";
 
-const api = "https://www.themealdb.com/api/json/v1/1";
-
-export const useRecipesStore = defineStore("recipes", {
+export const useRecipesStore = defineStore("products", {
   state: () => ({
     id: null,
-    recipes: [],
-    categories: [],
   }),
   getters: {
     recipesCount: (state) => state.recipes.length,
     categoriesCount: (state) => state.categories.length,
   },
   actions: {
-    async getRecipesCategories() {
-      try {
-        const response = await Axios.get(api + "/list.php?c=list");
-        this.categories = response.data.meals;
-        console.log(this.categories);
-        return this.categories;
-      } catch (err) {
-        console.log(err);
-      }
+    createProduct(name, expirationDate, category) {
+      productsCollection
+        .add({
+          expirationDate: expirationDate,
+          name: name,
+          category: category,
+          uid: uuid.v1(),
+        })
+        .then(() => {
+          console.log("Document successfully written!");
+        })
+        .catch((error) => {
+          console.error("Error writing document: ", error);
+        });
     },
-    async getRecipeInfo() {
-      try {
-        const recipeId = 52772;
-        const response = await Axios.get(api + "lookup.php?i=" + { recipeId });
-        return response.data.meals;
-      } catch (err) {
-        console.log(err);
-      }
+    readProducts() {
+      let productsData = [];
+      db.collection("products")
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            productsData.push({
+              id: doc.uid,
+              name: doc.data().name,
+              expirationDate: doc.data().expirationDate,
+              category: doc.data().category,
+            });
+            console.log(doc.id, " => ", doc.data());
+          });
+          return productsData;
+        })
+        .catch((error) => {
+          console.log("Error getting documents: ", error);
+        });
     },
-    async getRecipesByMainIngredient() {
-      try {
-        const response = await Axios.get(api + "list.php?i=list");
-        this.recipes = response.data.meals;
-      } catch (err) {
-        console.log(err);
-      }
+    deleteProduct(id) {
+      db.collection("products")
+        .doc(id)
+        .delete()
+        .then(() => {
+          console.log("Document successfully deleted!");
+        })
+        .catch((error) => {
+          console.error("Error removing document: ", error);
+        });
     },
-    async filterRecipesByMainIngredients() {
-      try {
-        const mainIngredient = "chicken_breast";
-        const response = await Axios.get(
-          api + "list.php?i=" + { mainIngredient }
-        );
-        return response.data.meals;
-      } catch (err) {
-        console.log(err);
-      }
+
+    readCategories() {
+      let productsData = [];
+      db.collection("categories")
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            productsData.push({
+              id: doc.uid,
+              categoryName: doc.data().categoryName,
+            });
+            console.log(doc.id, " => ", doc.data());
+          });
+          return productsData;
+        })
+        .catch((error) => {
+          console.log("Error getting documents: ", error);
+        });
     },
   },
 });

@@ -25,7 +25,6 @@
 </template>
 <script>
 import SimpleInput from "../components/SimpleInput.vue";
-import PasswordInput from "../components/PasswordInput.vue";
 import ConnectButton from "../components/ConnectButton.vue";
 import firebaseConfig from "../firebase";
 import { useQuasar } from "quasar";

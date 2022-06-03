@@ -18,15 +18,15 @@ firebase.initializeApp(firebaseConfig);
 const projectAuth = firebase.auth();
 const db = firebase.firestore();
 
+// collection references
+const categoriesCollection = db.collection("categories");
+const productsCollection = db.collection("products");
+
 export default { projectAuth, db };
 
 // utils
 // const db = firebase.firestore();
 // const auth = firebase.auth();
-
-// // collection references
-// const usersCollection = db.collection("users");
-// const adsCollection = db.collection("ads");
 
 // // export utils/refs
 // export { db, auth, usersCollection, adsCollection };

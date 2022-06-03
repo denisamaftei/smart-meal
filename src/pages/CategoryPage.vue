@@ -16,14 +16,52 @@
         </div>
         <div>
           <q-list class="list">
-            <q-item clickable v-ripple class="list-item">
-              <q-item-section class="product-name">Fish</q-item-section>
-              <q-item-section>20/12/2021</q-item-section>
-              <q-item-section @click="alert()" avatar>
+            <q-item
+              v-for="product in productsData"
+              :key="product.id"
+              clickable
+              v-ripple
+              class="list-item"
+            >
+              <q-item-section class="product-name">{{
+                product.name
+              }}</q-item-section>
+              <q-item-section>{{ product.expirationDate }}</q-item-section>
+              <q-item-section
+                @click="
+                  handleDialog(product.name, product.category, product.id)
+                "
+                avatar
+              >
                 <q-icon color="black" name="disabled_by_default" />
               </q-item-section>
             </q-item>
-            <q-item clickable v-ripple class="list-item">
+            <q-dialog v-if="dialog" v-model="dialog" persistent>
+              <q-card>
+                <q-card-section class="row items-center">
+                  <span class="q-ml-sm dialog"
+                    >Are you sure you wanna delete
+                    <span class="orange-text">{{ dialogName }} </span>
+                    from your
+                    <span class="orange-text">{{ dialogCategory }}</span
+                    >?</span
+                  >
+                </q-card-section>
+
+                <!-- Notice v-close-popup -->
+                <q-card-actions align="right">
+                  <q-btn flat label="Cancel" color="primary" v-close-popup />
+                  <q-btn
+                    flat
+                    label="Delete"
+                    @click="handleDelete(dialogId)"
+                    color="secondary"
+                    v-close-popup
+                  />
+                </q-card-actions>
+              </q-card>
+            </q-dialog>
+            <!-- <q-item clickable v-ripple class="list-item">
               <q-item-section class="product-name">Chicken</q-item-section>
               <q-item-section>20/12/2021</q-item-section>
               <q-item-section @click="alert()" avatar>
@@ -36,7 +74,7 @@
               <q-item-section @click="alert()" avatar>
                 <q-icon color="black" name="disabled_by_default" />
               </q-item-section>
-            </q-item>
+            </q-item> -->
           </q-list>
         </div>
       </div>
@@ -52,42 +90,134 @@
 </template>
 <script>
 import { useQuasar } from "quasar";
+import { useRoute, useRouter } from "vue-router";
+import firebaseConfig from "../firebase";
+import { ref } from "vue";
+
+const db = firebaseConfig.db;
+
+const dataForSetup = "";
+let dialogName,
+  dialogCategory,
+  dialogId = "";
 export default {
+  data() {
+    return {
+      productsData: [],
+    };
+  },
   setup() {
-    const $q = useQuasar();
-    // const test = "Fish";
-    // const fish = <div>test</div>;
-    const message =
-      "Are you sure you wanna delete Fish " +
-      // + fish +
-      " from your Frozen Products?";
-    function alert() {
-      $q.dialog({
-        title: "",
-        message: message,
-        style: "border-radius:10px;",
-        align: "center",
-        ok: {
-          push: true,
-          label: "delete",
-        },
-        cancel: {
-          push: true,
-          color: "negative",
-        },
-        persistent: true,
-      })
-        .onOk(() => {
-          console.log(">>>> OK");
+    // const splittedUrl = window.location.href.split("?=");
+    // const selectedCategory = splittedUrl[1].replaceAll("%20", " ");
+    // const $q = useQuasar();
+    // // const test = "Fish";
+    // const productToBeDeleted = dataForSetup;
+    // const message =
+    //   '<span class="dialog">Are you sure you wanna delete this?</span>';
+    // function alert() {
+    //   $q.dialog({
+    //     title: "",
+    //     message: message,
+    //     style: "border-radius:10px;",
+    //     align: "center",
+    //     html: true,
+    //     ok: {
+    //       push: true,
+    //       label: "delete",
+    //     },
+    //     cancel: {
+    //       push: true,
+    //       color: "negative",
+    //     },
+    //     persistent: true,
+    //   })
+    //     .onOk((id) => {
+    //       db.collection("products")
+    //         .doc(id)
+    //         .delete()
+    //         .then(() => {
+    //           console.log("Document successfully deleted!");
+    //         })
+    //         .catch((error) => {
+    //           console.error("Error removing document: ", error);
+    //         });
+    //     })
+    //     .onCancel(() => {
+    //       // console.log(">>>> Cancel");
+    //     })
+    //     .onDismiss(() => {
+    //       // console.log("I am triggered on both OK and Cancel");
+    //     });
+    // }
+    return { dialog: ref(false), cancelEnabled: ref(false) };
+  },
+  methods: {
+    handleDialog(name, category, id) {
+      this.dialog = true;
+      this.dialogName = name;
+      this.dialogCategory = category;
+      this.dialogId = id;
+      // console.log(this.dialogId);
+    },
+    handleDelete(id) {
+      console.log(id);
+      // this.productsData.splice(id, 1);
+      let newArray = this.productsData.filter((item) => !(item.id === id));
+      this.productsData = newArray;
+      db.collection("products")
+        .doc(id)
+        .delete()
+        .then(() => {
+          console.log("Document successfully deleted!");
         })
-        .onCancel(() => {
-          console.log(">>>> Cancel");
-        })
-        .onDismiss(() => {
-          console.log("I am triggered on both OK and Cancel");
+        .catch((error) => {
+          console.error("Error removing document: ", error);
         });
+    },
+  },
+  mounted() {
+    let url = "";
+
+    url = this.$route.fullPath;
+    console.log(url);
+    let splittedUrl = "";
+    // if (url.includes("?=")) {
+    splittedUrl = url.split("?=");
+    // } else {
+    //   splittedUrl = url;
+    // }
+    let selectedCategory = "";
+    if (splittedUrl[1]) {
+      selectedCategory = splittedUrl[1].replaceAll("%20", " ");
     }
-    return { alert };
+    db.collection("products")
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          console.log(doc.data().category);
+          console.log(selectedCategory);
+          if (doc.data().category == selectedCategory) {
+            this.productsData.push({
+              id: doc.id,
+              name: doc.data().name,
+              expirationDate: doc
+                .data()
+                .expirationDate.toDate()
+                .toString()
+                .split(" ")
+                .slice(1, 4)
+                .toString()
+                .replaceAll(",", " "),
+              category: doc.data().category,
+            });
+            // console.log(doc.id, " => ", doc.data());
+          }
+        });
+        return this.productsData;
+      })
+      .catch((error) => {
+        console.log("Error getting documents: ", error);
+      });
   },
 };
 </script>
@@ -148,5 +278,16 @@ export default {
   color: #f78250;
   font-weight: 900;
   padding-left: 2%;
+}
+</style>
+<style lang="scss">
+.orange-text {
+  color: #f78250;
+}
+.dialog {
+  font-family: customFont;
+  // font-weight: 600;
+  font-size: large;
+  text-align: center;
 }
 </style>

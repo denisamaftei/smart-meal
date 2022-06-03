@@ -13,70 +13,91 @@
       <div class="fridge-container">
         <img class="fridge-svg" src="../assets/Fridge.svg" />
         <span class="freezer-container products-container">
-          <q-btn class="products-btn" to="/category">
+          <q-btn class="products-btn" @click="handleClick(categoriesData[3])">
             <div>
               <img class="frozenProd-svg" src="../assets/FrozenProducts.svg" />
             </div>
             <div class="products-category">
-              <div>Frozen</div>
-              Products
+              {{ categoriesData[3] }}
             </div>
           </q-btn>
         </span>
         <span class="topLevel-container">
-          <div class="products-container">
+          <div
+            class="products-container"
+            @click="handleClick(categoriesData[4])"
+          >
             <img src="../assets/Sweets.svg" />
             <div class="products-category">
-              <div>Sweets</div>
-              & Snacks
+              {{ categoriesData[4] }}
             </div>
           </div>
           <div class="products-container">
             <img src="../assets/MeatProducts.svg" />
-            <div class="products-category">
-              <div>Meat</div>
-              Products
+            <div
+              class="products-category"
+              @click="handleClick(categoriesData[6])"
+            >
+              {{ categoriesData[6] }}
             </div>
           </div>
           <div class="products-container">
             <img src="../assets/Drinks.svg" />
-            <div class="products-category">
-              <div>Beverage</div>
-              Products
+            <div
+              class="products-category"
+              @click="handleClick(categoriesData[7])"
+            >
+              {{ categoriesData[7] }}
             </div>
           </div>
         </span>
         <span class="middleLevel-container">
           <div class="products-container">
             <img src="../assets/Dairy.svg" />
-            <div class="products-category">
-              <div>Dairy</div>
-              Products
+            <div
+              class="products-category"
+              @click="handleClick(categoriesData[1])"
+            >
+              {{ categoriesData[1] }}
             </div>
           </div>
           <div class="products-container">
             <img src="../assets/Bakery.svg" />
-            <div class="products-category">
-              <div>Bakery</div>
-              Products
+            <div
+              class="products-category"
+              @click="handleClick(categoriesData[0])"
+            >
+              {{ categoriesData[0] }}
             </div>
           </div>
           <div class="products-container">
             <img src="../assets/Other.svg" />
-            <div class="products-category other-category">
-              <div>Other</div>
-              Products
+            <div
+              class="products-category other-category"
+              @click="handleClick(categoriesData[5])"
+            >
+              {{ categoriesData[5] }}
             </div>
           </div>
         </span>
         <span class="bottomLevel-container">
           <div class="products-container">
             <img src="../assets/Fruits.svg" />
-            <div class="products-category">Fruits</div>
+            <div
+              class="products-category"
+              @click="handleClick(categoriesData[2])"
+            >
+              {{ categoriesData[2] }}
+            </div>
           </div>
           <div class="products-container">
             <img src="../assets/Vegetables.svg" />
-            <div class="products-category">Vegetables</div>
+            <div
+              class="products-category"
+              @click="handleClick(categoriesData[8])"
+            >
+              {{ categoriesData[8] }}
+            </div>
           </div>
         </span>
       </div>
@@ -85,7 +106,9 @@
   </q-page-container>
 </template>
 <script>
-// import firebaseConfig from "../firebase";
+import firebaseConfig from "../firebase";
+
+const db = firebaseConfig.db;
 // import { useRouter } from "vue-router";
 // const router = useRouter();
 // let self = this;
@@ -100,11 +123,41 @@
 //     console.log(user);
 //   }
 // });
-// export default {
-//   onMounted() {
-//     authListener(user);
-//   },
-// };
+export default {
+  data() {
+    return {
+      categoryName: "",
+      categoriesData: [],
+    };
+  },
+  methods: {
+    readCategories() {
+      db.collection("categories")
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            // this.categoriesData.push({
+            //   id: doc.id,
+            //   categoryName: doc.data().categoryName,
+            // });
+            this.categoriesData.push(doc.data().categoryName);
+            // console.log(doc.id, " => ", doc.data());
+          });
+          return this.categoriesData;
+        })
+        .catch((error) => {
+          console.log("Error getting documents: ", error);
+        });
+    },
+    handleClick(e) {
+      this.$router.push("/category?=" + e);
+    },
+  },
+  beforeMount() {
+    this.readCategories();
+    console.log(this.categoriesData);
+  },
+};
 // router.beforeEach((to, from, next) => {
 //   if (to.matched.some((record) => record.meta.authRequired)) {
 //     if (firebaseConfig.projectAuth().currentUser) {
@@ -156,6 +209,8 @@
 }
 .products-category {
   text-align: center;
+  width: min-content;
+  min-width: 16vw; //only on mobile
 }
 
 .products-category {

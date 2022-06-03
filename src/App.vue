@@ -10,8 +10,13 @@ export default defineComponent({
 });
 </script>
 <style lang="scss">
+@font-face {
+  font-family: customFont;
+  src: url("./fonts/cardo-v19-latin-regular.woff");
+}
+
 #q-app {
-  font-family: "Times New Roman", Times, serif;
+  font-family: customFont, "Times New Roman", Times, serif;
 }
 .products-container {
   .q-btn__content {

@@ -79,7 +79,6 @@
   </q-page-container>
 </template>
 <script>
-// import AdContainer from 'components/AdContainer.vue'
 import { useRecipesStore } from "../stores/recipesStore";
 import { ref, watchEffect } from "vue";
 import firebaseConfig from "../firebase";
@@ -97,9 +96,7 @@ export default {
 
     return { getRecipesCategories: recipesStore.getRecipesCategories };
   },
-  components: {
-    // AdContainer,
-  },
+
   methods: {
     logout() {
       console.log("logout");
