@@ -22,7 +22,7 @@ const db = firebase.firestore();
 const categoriesCollection = db.collection("categories");
 const productsCollection = db.collection("products");
 
-export default { projectAuth, db };
+export default { projectAuth, db, productsCollection };
 
 // utils
 // const db = firebase.firestore();

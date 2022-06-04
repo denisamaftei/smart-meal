@@ -115,4 +115,7 @@ export default {
 .q-field--with-bottom {
   padding-bottom: 0px;
 }
+.login-info {
+  padding-top: 10vh;
+}
 </style>

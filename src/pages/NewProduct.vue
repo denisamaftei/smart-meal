@@ -25,23 +25,14 @@
             label-color="orange"
           ></SimpleInput>
         </div>
-        <div class="input-title">Expiration Date</div>
-        <q-input
-          class="product-input"
-          label-color="orange"
-          bg-color="info"
-          v-model="date"
-          type="date"
-          stack-label
-          filled
-        />
         <div class="input-title">Category</div>
         <q-select
           behavior="menu"
+          transition-show="fade"
           class="product-input"
           bg-color="info"
           clearable
-          v-model="model"
+          v-model="category"
           filled
           :options="options"
         >
@@ -57,9 +48,27 @@
             </q-item>
           </template>
         </q-select>
+        <div class="input-title">Expiration Date</div>
+
+        <q-input
+          class="product-input"
+          label-color="orange"
+          bg-color="info"
+          v-model="date"
+          type="date"
+          stack-label
+          filled
+        />
 
         <div class="add-container">
-          <q-btn class="done-btn" color="primary" round icon="check" to="/" />
+          <q-btn
+            class="done-btn"
+            @click="createProduct(this.name, this.date, this.category.value)"
+            color="primary"
+            round
+            icon="check"
+            to="/"
+          />
         </div>
       </q-layout>
     </div>
@@ -68,21 +77,111 @@
 <script>
 import SimpleInput from "../components/SimpleInput.vue";
 import { ref } from "vue";
+import firebaseConfig from "../firebase";
+import { uuid } from "vue-uuid";
+// const db = firebas;
+
+const db = firebaseConfig.db;
+let productsCollection = db.collection("products");
 export default {
   components: { SimpleInput },
   data() {
     return {
       name: "",
       date: "",
-      model: ref(null),
+      category: ref(null),
+      productsData: [],
       options: [
-        { label: "Google", value: "Google", icon: "mail" },
-        { label: "Google", value: "Google", icon: "mail" },
-        { label: "Google", value: "Google", icon: "mail" },
-        { label: "Google", value: "Google", icon: "mail" },
-        { label: "Google", value: "Google", icon: "mail" },
+        {
+          label: "Frozen Products",
+          value: "Frozen Products",
+          icon: "fa-solid fa-ice-cream",
+        },
+        {
+          label: "Sweets & Snacks",
+          value: "Sweets & Snacks",
+          icon: "fa-solid fa-cake-candles",
+        },
+        {
+          label: "Meat Products",
+          value: "Meat Products",
+          icon: "fa-solid fa-drumstick-bite",
+        },
+        {
+          label: "Beverage Products",
+          value: "Beverage Products",
+          icon: "fa-solid fa-wine-bottle",
+        },
+        {
+          label: "Dairy Products",
+          value: "Dairy Products",
+          icon: "fa-solid fa-cheese",
+        },
+        {
+          label: "Bakery Products",
+          value: "Bakery Products",
+          icon: "fa-solid fa-bread-slice",
+        },
+
+        { label: "Fruits", value: "Fruits", icon: "fa-solid fa-apple-whole" },
+        {
+          label: "Vegetables",
+          value: "Vegetables",
+          icon: "fa-solid fa-carrot",
+        },
+        {
+          label: "Other Products",
+          value: "Other Products",
+          icon: "fa-solid fa-pizza-slice",
+        },
       ],
     };
+  },
+  methods: {
+    readCategories() {
+      db.collection("categories")
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            this.productsData.push({
+              id: doc.uid,
+              categoryName: doc.data().categoryName,
+            });
+            console.log(doc.id, " => ", doc.data());
+          });
+          return this.productsData;
+        })
+        .catch((error) => {
+          console.log("Error getting documents: ", error);
+        });
+    },
+    createProduct(name, expirationDate, category) {
+      let splittedDate = expirationDate.split("-"); //[2022, 06, 10]
+      //swapping day and year
+      let year = splittedDate[0];
+      splittedDate[0] = splittedDate[2];
+      splittedDate[2] = year;
+      //[10, 06, 2022]
+      // splittedDate.splice(1, 0, "-"); // [10, - , 06, 2022]
+      // splittedDate.splice(3, 0, "-"); // [10, - , 06, - , 2022]
+      let finalDate = splittedDate.join("-");
+      db.collection("products")
+        .add({
+          expirationDate: finalDate,
+          name: name,
+          category: category,
+          uid: uuid.v1(),
+        })
+        .then(() => {
+          console.log("Document successfully written!");
+        })
+        .catch((error) => {
+          console.error("Error writing document: ", error);
+        });
+    },
+  },
+  beforeMount() {
+    this.readCategories();
   },
 };
 </script>
@@ -101,7 +200,7 @@ export default {
 }
 .input-title {
   color: #f78250;
-  padding-top: 10%;
+  padding-top: 7%;
 }
 .q-field {
   padding-bottom: 0;
@@ -117,7 +216,7 @@ export default {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  padding-top: 25%;
+  padding-top: 10%;
 }
 .q-icon,
 .material-icons,
@@ -126,11 +225,17 @@ export default {
 }
 .q-field__native,
 .q-field__input {
-  color: #f99e77 !important;
+  color: #f99e77;
 }
 .done-btn {
   font-size: 1.2em;
   // border-radius: 10px;
+}
+.q-item {
+  min-height: min-content !important;
+  padding-top: 1vh !important;
+  padding-bottom: 0 !important;
+  font-family: customFont;
 }
 </style>
 <style lang="scss">
@@ -140,5 +245,14 @@ export default {
 .q-field--filled.q-field--highlighted .q-field__control:after {
   margin-left: 7% !important;
   margin-right: 7% !important;
+}
+.popupContentClass {
+  height: 10%;
+}
+.q-item__label {
+  margin-top: 1vh;
+}
+.q-position-engine {
+  max-height: 30% !important;
 }
 </style>

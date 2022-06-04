@@ -10,6 +10,7 @@
           </div>
         </q-header>
         <div class="page-title">Recipes</div>
+        <q-btn @click="getRecipesCategories(mainIngredient)"></q-btn>
         <q-expansion-item>
           <template v-slot:header>
             <q-item-section class="input-title"> Breakfast </q-item-section>
@@ -72,6 +73,21 @@
     </div>
   </q-page-container>
 </template>
+<script>
+import { useRecipesStore } from "../stores/recipesStore";
+export default {
+  setup() {
+    const recipesStore = useRecipesStore();
+    return { getRecipesCategories: recipesStore.getRecipesCategories };
+  },
+  data() {
+    return {
+      mainIngredient: "broccoli",
+    };
+  },
+};
+</script>
+
 <style lang="scss" scoped>
 .q-page-container {
   padding-top: 0 !important;

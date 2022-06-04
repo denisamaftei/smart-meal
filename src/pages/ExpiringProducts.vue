@@ -12,7 +12,7 @@
         <div class="page-title">Expiring Soon</div>
         <q-table
           class="expiring-table"
-          :rows="rows"
+          :rows="productsData"
           row-key="name"
           :virtual-scroll-item-size="48"
           :virtual-scroll-sticky-size-start="48"
@@ -26,61 +26,129 @@
   </q-page-container>
 </template>
 <script>
-const rows = [
-  {
-    name: "Frozen Yogurt",
-    category: "P",
-    "exp Date": "11/12/2021",
-  },
-  {
-    name: "Ice cream sandwich",
-    category: "P",
-    "exp Date": "10/12/2021",
-  },
-  {
-    name: "Eclair",
-    category: "P",
-    "exp Date": "09/12/2021",
-  },
-  {
-    name: "Cupcake",
-    category: "P",
-    "exp Date": "07/12/2021",
-  },
-  {
-    name: "Gingerbread",
-    category: "P",
-    "exp Date": "30/12/2021",
-  },
-  {
-    name: "Jelly bean",
-    category: "P",
-    "exp Date": "04/12/2021",
-  },
-  {
-    name: "Lollipop",
-    category: "P",
-    "exp Date": "01/12/2021",
-  },
-  {
-    name: "Honeycomb",
-    category: "P",
-    "exp Date": "05/12/2021",
-  },
-  {
-    name: "Donut",
-    category: "P",
-    "exp Date": "23/12/2021",
-  },
-  {
-    name: "KitKat",
-    category: "P",
-    "exp Date": "22/12/2021",
-  },
-];
+import firebaseConfig from "../firebase";
+const db = firebaseConfig.db;
+
 export default {
+  data() {
+    return {
+      productsData: [],
+    };
+  },
   setup() {
-    return { rows };
+    let frozenProdSVG = (
+      <span style="color:#f99e77">
+        <i class="fa-solid fa-ice-cream"></i>
+      </span>
+    );
+    let sweetsProdSVG = (
+      <span style="color:#f99e77">
+        <i class="fa-solid fa-cake-candles"></i>
+      </span>
+    );
+    let meatProdSVG = (
+      <span style="color:#f99e77">
+        <i class="fa-solid fa-drumstick"></i>
+      </span>
+    );
+    let bakeryProdSVG = (
+      <span style="color:#f99e77">
+        <i class="fa-solid fa-bread-slice"></i>
+      </span>
+    );
+    let dairyProdSVG = (
+      <span style="color:#f99e77">
+        <i class="fa-solid fa-cheese"></i>
+      </span>
+    );
+    let beveragesProdSVG = (
+      <span style="color:#f99e77">
+        <i class="fa-solid fa-wine-bottle"></i>
+      </span>
+    );
+    let otherProdSVG = (
+      <span style="color:#f99e77">
+        <i class="fa-solid fa-pizza-slice"></i>
+      </span>
+    );
+    let fruitsProdSVG = (
+      <span style="color:#f99e77">
+        <i class="fa-solid fa-apple-whole"></i>
+      </span>
+    );
+    let vegetablesProdSVG = (
+      <span style="color:#f99e77">
+        <i class="fa-solid fa-carrot"></i>
+      </span>
+    );
+    return {
+      frozenProdSVG,
+      sweetsProdSVG,
+      meatProdSVG,
+      bakeryProdSVG,
+      dairyProdSVG,
+      beveragesProdSVG,
+      otherProdSVG,
+      fruitsProdSVG,
+      vegetablesProdSVG,
+    };
+  },
+  methods: {
+    readProducts() {
+      db.collection("products")
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            this.productsData.push({
+              name: doc.data().name,
+              category: doc.data().category,
+              expirationDate: doc.data().expirationDate,
+            });
+            // console.log(doc.id, " => ", doc.data());
+          });
+          this.productsData.forEach((prod) => {
+            switch (prod.category) {
+              case "Frozen Products":
+                prod.category = this.frozenProdSVG;
+                break;
+              case "Sweets & Snacks":
+                prod.category = this.sweetsProdSVG;
+                break;
+              case "Meat Products":
+                prod.category = this.meatProdSVG;
+                break;
+              case "Beverage Products":
+                prod.category = this.beveragesProdSVG;
+                break;
+              case "Dairy Products":
+                prod.category = this.dairyProdSVG;
+                break;
+              case "Bakery Products":
+                prod.category = this.bakeryProdSVG;
+                break;
+              case "Other Products":
+                prod.category = this.otherProdSVG;
+                break;
+              case "Fruits":
+                prod.category = this.fruitsProdSVG;
+                break;
+              case "Vegetables":
+                prod.category = this.vegetablesProdSVG;
+                break;
+              default:
+                break;
+            }
+          });
+          return this.productsData;
+        })
+        .catch((error) => {
+          console.log("Error getting documents: ", error);
+        });
+    },
+  },
+  beforeMount() {
+    this.readProducts();
+    console.log(this.productsData);
   },
 };
 </script>

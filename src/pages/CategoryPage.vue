@@ -8,7 +8,7 @@
           </div>
         </div>
       </q-header>
-      <div class="page-title">Frozen Products</div>
+      <div class="page-title">{{ this.selectedCategory }}</div>
       <div class="list-container">
         <div class="list-head">
           <div class="products-name">Name</div>
@@ -104,6 +104,7 @@ export default {
   data() {
     return {
       productsData: [],
+      selectedCategory: "",
     };
   },
   setup() {
@@ -186,28 +187,21 @@ export default {
     // } else {
     //   splittedUrl = url;
     // }
-    let selectedCategory = "";
+
     if (splittedUrl[1]) {
-      selectedCategory = splittedUrl[1].replaceAll("%20", " ");
+      this.selectedCategory = splittedUrl[1].replaceAll("%20", " ");
     }
     db.collection("products")
       .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           console.log(doc.data().category);
-          console.log(selectedCategory);
-          if (doc.data().category == selectedCategory) {
+          console.log(this.selectedCategory);
+          if (doc.data().category == this.selectedCategory) {
             this.productsData.push({
               id: doc.id,
               name: doc.data().name,
-              expirationDate: doc
-                .data()
-                .expirationDate.toDate()
-                .toString()
-                .split(" ")
-                .slice(1, 4)
-                .toString()
-                .replaceAll(",", " "),
+              expirationDate: doc.data().expirationDate,
               category: doc.data().category,
             });
             // console.log(doc.id, " => ", doc.data());
