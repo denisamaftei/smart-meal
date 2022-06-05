@@ -1,7 +1,8 @@
 import { defineStore } from "pinia";
 import Axios from "axios";
 
-const api = "https://api.edamam.com/api/recipes/v2?type=public&q=";
+const api =
+  "https://api.spoonacular.com/recipes/complexSearch?apiKey=979b3d8b99e74fe29600f1a6c0add35f&number=1&fillIngredients=true";
 
 export const useRecipesStore = defineStore("recipes", {
   state: () => ({
@@ -13,16 +14,12 @@ export const useRecipesStore = defineStore("recipes", {
     categoriesCount: (state) => state.categories.length,
   },
   actions: {
-    async getRecipesCategories(mainIngredient) {
+    async getRecipes() {
       try {
-        const response = await Axios.get(
-          api +
-            mainIngredient +
-            "&app_id=412ac3e0&app_key=225acfa86996aa4b29e329d9baf0584c"
-        );
+        const response = await Axios.get(api);
 
-        for (let i = 0; i < response.data.hits.length; i++) {
-          this.recipes[i] = response.data.hits[i].recipe;
+        for (let i = 0; i < response.data.results.length; i++) {
+          this.recipes[i] = response.data.results[i];
         }
         console.log(this.recipes);
         return this.recipes;
