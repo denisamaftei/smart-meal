@@ -1,3 +1,4 @@
+/* eslint-disable vue/no-ref-as-operand */
 <template>
   <q-page-container class="newProductPage-container">
     <div class="q-pa-md row justify-center">
@@ -14,16 +15,10 @@
             <div class="page-title">Recipes</div>
 
             <div class="filter">
-              <i v-if="!filterOn" class="filterIcon fa-solid fa-filter"> </i>
-              <div v-if="!filterOn" class="filter-text">Filter</div>
-              <i
-                v-if="filterOn"
-                class="filterIcon fa-solid fa-filter-circle-xmark"
-              ></i>
-              <div v-if="filterOn" class="filter-text">Clear filter</div>
-              <q-popup-proxy :target="filter">
+              <q-popup-proxy target=".filterOff">
                 <q-banner>
                   <q-select
+                    clearable
                     behavior="menu"
                     label="Select ingredients"
                     v-model="model"
@@ -38,6 +33,10 @@
                   />
                 </q-banner>
               </q-popup-proxy>
+              <span class="filterOff">
+                <i class="filterIcon fa-solid fa-filter"> </i>
+                <div class="filter-text">Filter</div>
+              </span>
             </div>
           </div>
           <!-- <span style="color: #f99e77"> -->
@@ -96,12 +95,11 @@ import { ref } from "vue";
 
 const recipesStore = useRecipesStore();
 const stringOptions = ["Google", "Facebook", "Twitter", "Apple", "Oracle"];
+// const model = ref(null);
+const filterOptions = ref(stringOptions);
 export default {
   setup() {
-    const model = ref(null);
-    const filterOptions = ref(stringOptions);
     return {
-      model,
       filterOptions,
       getRecipes: recipesStore.getRecipes,
       createValue(val, done) {
@@ -138,9 +136,6 @@ export default {
           done(null);
           model.value = modelValue;
         }
-        if (model.value) {
-          this.filterOn = true;
-        }
       },
 
       filterFn(val, update) {
@@ -154,14 +149,25 @@ export default {
               (v) => v.toLowerCase().indexOf(needle) > -1
             );
           }
+          // eslint-disable-next-line vue/no-ref-as-operand
+          // if (model._value != "") {
+          //   // eslint-disable-next-line vue/no-ref-as-operand
+          //   console.log(model._value);
+          //   filterOn.value = true;
+          // } else {
+          //   filterOn.value = false;
+          // }
         });
       },
     };
   },
   data() {
+    // eslint-disable-next-line vue/no-ref-as-operand
     return {
       recipes: [],
-      filterOn: false,
+      // eslint-disable-next-line vue/no-ref-as-operand
+      filterOn: ref(false),
+      model: ref(null),
     };
   },
   methods: {
@@ -256,6 +262,12 @@ export default {
 }
 .q-banner {
   min-width: 100%;
+}
+.filterOn {
+  display: none;
+  font-size: 30px;
+  width: 100%;
+  color: #f78250;
 }
 </style>
 <style lang="scss">
