@@ -18,6 +18,8 @@
               <q-popup-proxy target=".filterOff">
                 <q-banner>
                   <q-select
+                    @update:model-value="getRecipesBySelectedIngredients(model)"
+                    emit-value
                     clearable
                     behavior="menu"
                     label="Select ingredients"
@@ -92,16 +94,19 @@
 <script>
 import { useRecipesStore } from "../stores/recipesStore";
 import { ref } from "vue";
+import firebaseConfig from "../firebase";
+const db = firebaseConfig.db;
 
+let productsData = [];
 const recipesStore = useRecipesStore();
-const stringOptions = ["Google", "Facebook", "Twitter", "Apple", "Oracle"];
-// const model = ref(null);
-const filterOptions = ref(stringOptions);
+const model = ref(null);
+const filterOptions = ref(productsData);
 export default {
   setup() {
     return {
       filterOptions,
       getRecipes: recipesStore.getRecipes,
+      getRecipesByIngredients: recipesStore.getRecipesByIngredients,
       createValue(val, done) {
         // Calling done(var) when new-value-mode is not set or is "add", or done(var, "add") adds "var" content to the model
         // and it resets the input textbox to empty string
@@ -124,8 +129,8 @@ export default {
             .map((v) => v.trim())
             .filter((v) => v.length > 0)
             .forEach((v) => {
-              if (stringOptions.includes(v) === false) {
-                stringOptions.push(v);
+              if (productsData.includes(v) === false) {
+                productsData.push(v);
               }
               if (modelValue.includes(v) === false) {
                 modelValue.push(v);
@@ -141,11 +146,11 @@ export default {
       filterFn(val, update) {
         update(() => {
           if (val === "") {
-            filterOptions.value = stringOptions;
+            filterOptions.value = productsData;
           } else {
             const needle = val.toLowerCase();
 
-            filterOptions.value = stringOptions.filter(
+            filterOptions.value = productsData.filter(
               (v) => v.toLowerCase().indexOf(needle) > -1
             );
           }
@@ -175,10 +180,59 @@ export default {
       this.recipes = await this.getRecipes();
       return this.recipes;
     },
+    async getRecipesBySelectedIngredients(userSelection) {
+      if (userSelection == null) {
+        userSelection = "";
+      }
+      console.log(userSelection);
+      this.recipes = await this.getRecipesByIngredients(userSelection);
+      console.log(this.recipes);
+      setTimeout(() => {
+        return this.recipes;
+      }, 5000);
+    },
+    readProducts() {
+      db.collection("products")
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            productsData.push(doc.data().name);
+            // console.log(doc.id, " => ", doc.data());
+          });
+          return productsData;
+        })
+        .catch((error) => {
+          console.log("Error getting documents: ", error);
+        });
+    },
+    sendModelData(model) {
+      // let newModel = "";
+      // setTimeout(function () {
+      //   newModel = model;
+      //   console.log(newModel);
+      // }, 2000);
+      // if (model !== null) {
+      //   this.getRecipesBySelectedIngredients(model);
+      // }
+    },
   },
-  // beforeMount() {
-  //   this.getRecipesInfo();
-  // },
+  mounted() {
+    // this.getRecipesInfo();
+    this.readProducts();
+    console.log("before");
+    let noIngredients = "";
+    this.$watch(
+      () => {
+        return this.model;
+      },
+      (newVal, oldVal) => {
+        this.getRecipesBySelectedIngredients(newVal);
+      },
+      { deep: true }
+    );
+
+    // console.log(this.recipesData);
+  },
 };
 </script>
 

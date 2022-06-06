@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import Axios from "axios";
 
 const api =
-  "https://api.spoonacular.com/recipes/complexSearch?apiKey=979b3d8b99e74fe29600f1a6c0add35f&number=1&fillIngredients=true";
+  "https://api.spoonacular.com/recipes/complexSearch?apiKey=e6a15b89c3dc47d0b3df5cfa8b568ed9&number=10&fillIngredients=true";
 
 export const useRecipesStore = defineStore("recipes", {
   state: () => ({
@@ -36,14 +36,20 @@ export const useRecipesStore = defineStore("recipes", {
     //     console.log(err);
     //   }
     // },
-    // async getRecipesByMainIngredient() {
-    //   try {
-    //     const response = await Axios.get(api + "list.php?i=list");
-    //     this.recipes = response.data.meals;
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
-    // },
+    async getRecipesByIngredients(selectedIngredients) {
+      try {
+        const response = await Axios.get(
+          api + "&includeIngredients=" + selectedIngredients
+        );
+        for (let i = 0; i < response.data.results.length; i++) {
+          this.recipes[i] = response.data.results[i];
+        }
+        console.log(this.recipes);
+        return this.recipes;
+      } catch (err) {
+        console.log(err);
+      }
+    },
     // async filterRecipesByMainIngredients() {
     //   try {
     //     const mainIngredient = "chicken_breast";
