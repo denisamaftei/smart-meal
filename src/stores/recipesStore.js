@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import Axios from "axios";
 
 const api =
-  "https://api.spoonacular.com/recipes/complexSearch?apiKey=deac22e3e329404f94320f21bba37022&number=10&fillIngredients=true";
+  "https://api.spoonacular.com/recipes/complexSearch?apiKey=deac22e3e329404f94320f21bba37022&number=1&fillIngredients=true";
 
 export const useRecipesStore = defineStore("recipes", {
   state: () => ({
@@ -40,11 +40,14 @@ export const useRecipesStore = defineStore("recipes", {
         const response = await Axios.get(
           api + "&includeIngredients=" + selectedIngredients
         );
+        // console.log(response.data);
         for (let i = 0; i < response.data.results.length; i++) {
           this.recipes[i] = response.data.results[i];
         }
+        if (response.data.results.length === 0) {
+          this.recipes = [];
+        }
 
-        console.log(this.recipes);
         return this.recipes;
       } catch (err) {
         console.log(err);

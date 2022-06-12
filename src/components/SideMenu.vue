@@ -8,7 +8,7 @@
     @click="toggleLeftDrawer"
   />
   <q-drawer v-model="leftDrawerOpen" side="left" behavior="mobile" elevated>
-    <q-banner rounded>
+    <q-banner class="avatar-banner" rounded>
       <template v-slot:avatar>
         <img class="profile-banner" src="../assets/Food.svg" />
       </template>
@@ -147,7 +147,9 @@ export default {
 }
 </style>
 <style lang="scss">
-.q-banner__avatar {
-  width: 100% !important;
+.avatar-banner {
+  .q-banner__avatar {
+    width: 100% !important;
+  }
 }
 </style>

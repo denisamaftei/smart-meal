@@ -7,6 +7,7 @@
           <div class="q-pa-md">
             <div class="q-gutter-md">
               <SideMenu></SideMenu>
+
               <img src="../assets/Logo.svg" />
             </div>
           </div>
@@ -46,7 +47,8 @@
 
           <!-- </span> -->
         </div>
-        <q-card v-for="recipe in recipes" :key="recipe.id">
+
+        <!-- <q-card v-for="recipe in recipes" :key="recipe.id">
           <q-card-section>
             <div class="recipe-container">
               <div class="recipe-presentation">
@@ -66,7 +68,7 @@
               </div>
             </div>
           </q-card-section>
-        </q-card>
+        </q-card> -->
       </q-layout>
     </div>
   </q-page-container>
@@ -76,14 +78,15 @@ import { useRecipesStore } from "../stores/recipesStore";
 import { ref } from "vue";
 import firebaseConfig from "../firebase";
 import SideMenu from "src/components/SideMenu.vue";
-
 const db = firebaseConfig.db;
 
 let productsData = [];
 const recipesStore = useRecipesStore();
 const model = ref(null);
 const filterOptions = ref(productsData);
+let checkForUserSelection = 1;
 export default {
+  components: { SideMenu },
   setup() {
     return {
       filterOptions,
@@ -159,20 +162,29 @@ export default {
   },
   methods: {
     async getRecipesInfo() {
-      this.recipes = await this.getRecipes();
+      let response = await this.getRecipes();
+
+      for (let i = 0; i < response.length; i++) {
+        this.recipes = [
+          { key: response[i].title, value: response[i].missedIngredients },
+        ];
+      }
+
+      console.log(this.recipes);
       return this.recipes;
     },
-    async getRecipesBySelectedIngredients(userSelection) {
-      if (userSelection == null) {
-        userSelection = "";
-      }
-      console.log(userSelection);
-      this.recipes = await this.getRecipesByIngredients(userSelection);
-      console.log(this.recipes);
-      setTimeout(() => {
-        return this.recipes;
-      }, 5000);
-    },
+    // async getRecipesBySelectedIngredients(userSelection) {
+    //   if (userSelection == null) {
+    //     userSelection = "";
+    //   }
+    //   this.recipes = "";
+    //   console.log(userSelection.toString().toLowerCase());
+    //   this.recipes = await this.getRecipesByIngredients(
+    //     userSelection.toString().toLowerCase()
+    //   );
+    //   console.log(this.recipes);
+    //   return this.recipes;
+    // },
     readProducts() {
       db.collection("products")
         .get()
@@ -199,26 +211,26 @@ export default {
     },
   },
   mounted() {
-    // this.getRecipesInfo();
-    this.readProducts();
     console.log("before");
-    this.$watch(
-      () => {
-        return this.model;
-      },
-      (newVal, oldVal) => {
-        this.getRecipesBySelectedIngredients(newVal);
-      },
-      { deep: true }
-    );
+    let noIngredients = "";
 
     // console.log(this.recipesData);
   },
-  components: { SideMenu },
-  // beforeMount() {
-  //   let noIngredients = "";
-  //   this.getRecipesBySelectedIngredients(noIngredients);
-  // },
+  beforeMount() {
+    this.getRecipesInfo();
+
+    if (productsData.length == 0) {
+      this.readProducts();
+    }
+    // this.$watch(
+    //   () => {
+    //     return this.model;
+    //   },
+    //   (newVal, oldVal) => {
+    //     this.getRecipesBySelectedIngredients(newVal);
+    //   }
+    // );
+  },
 };
 </script>
 
@@ -309,12 +321,12 @@ export default {
   width: 100%;
   color: #f78250;
 }
-.q-card {
-  box-shadow: none;
-}
 .q-gutter-md {
   display: flex;
   justify-content: space-between;
+}
+.q-card {
+  box-shadow: none;
 }
 </style>
 <style lang="scss">
