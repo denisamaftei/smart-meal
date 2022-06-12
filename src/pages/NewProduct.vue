@@ -5,6 +5,7 @@
         <q-header>
           <div class="q-pa-md">
             <div class="q-gutter-md">
+              <SideMenu></SideMenu>
               <img src="../assets/Logo.svg" />
             </div>
           </div>
@@ -79,12 +80,13 @@ import SimpleInput from "../components/SimpleInput.vue";
 import { ref } from "vue";
 import firebaseConfig from "../firebase";
 import { uuid } from "vue-uuid";
+import SideMenu from "src/components/SideMenu.vue";
 // const db = firebas;
 
 const db = firebaseConfig.db;
 let productsCollection = db.collection("products");
 export default {
-  components: { SimpleInput },
+  components: { SimpleInput, SideMenu },
   data() {
     return {
       name: "",
@@ -236,6 +238,10 @@ export default {
   padding-top: 1vh !important;
   padding-bottom: 0 !important;
   font-family: customFont;
+}
+.q-gutter-md {
+  display: flex;
+  justify-content: space-between;
 }
 </style>
 <style lang="scss">

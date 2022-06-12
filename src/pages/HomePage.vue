@@ -5,10 +5,12 @@
       <q-header>
         <div class="q-pa-md">
           <div class="q-gutter-md">
+            <SideMenu></SideMenu>
             <img src="../assets/Logo.svg" />
           </div>
         </div>
       </q-header>
+
       <div class="page-title">Your Fridge</div>
       <div class="fridge-container">
         <img class="fridge-svg" src="../assets/Fridge.svg" />
@@ -107,7 +109,8 @@
 </template>
 <script>
 import firebaseConfig from "../firebase";
-
+import { ref } from "vue";
+import SideMenu from "src/components/SideMenu.vue";
 const db = firebaseConfig.db;
 // import { useRouter } from "vue-router";
 // const router = useRouter();
@@ -128,6 +131,15 @@ export default {
     return {
       categoryName: "",
       categoriesData: [],
+    };
+  },
+  setup() {
+    const leftDrawerOpen = ref(false);
+    return {
+      leftDrawerOpen,
+      toggleLeftDrawer() {
+        leftDrawerOpen.value = !leftDrawerOpen.value;
+      },
     };
   },
   methods: {
@@ -157,6 +169,7 @@ export default {
     this.readCategories();
     console.log(this.categoriesData);
   },
+  components: { SideMenu },
 };
 // router.beforeEach((to, from, next) => {
 //   if (to.matched.some((record) => record.meta.authRequired)) {
@@ -261,5 +274,9 @@ export default {
   justify-content: center;
   flex-direction: column;
   align-items: center;
+}
+.q-gutter-md {
+  display: flex;
+  justify-content: space-between;
 }
 </style>

@@ -4,6 +4,7 @@
       <q-header>
         <div class="q-pa-md">
           <div class="q-gutter-md">
+            <SideMenu class="side-menu"></SideMenu>
             <img src="../assets/Logo.svg" />
           </div>
         </div>
@@ -93,6 +94,7 @@ import { useQuasar } from "quasar";
 import { useRoute, useRouter } from "vue-router";
 import firebaseConfig from "../firebase";
 import { ref } from "vue";
+import SideMenu from "src/components/SideMenu.vue";
 
 const db = firebaseConfig.db;
 
@@ -109,7 +111,7 @@ export default {
   },
   setup() {
     // const splittedUrl = window.location.href.split("?=");
-    // const selectedCategory = splittedUrl[1].replaceAll("%20", " ");
+    // const selectedCategory = splittedUrl[1].replaceAll(" ", " ");
     // const $q = useQuasar();
     // // const test = "Fish";
     // const productToBeDeleted = dataForSetup;
@@ -176,9 +178,9 @@ export default {
         });
     },
   },
+  //this needs to be made in store
   mounted() {
     let url = "";
-
     url = this.$route.fullPath;
     console.log(url);
     let splittedUrl = "";
@@ -187,9 +189,8 @@ export default {
     // } else {
     //   splittedUrl = url;
     // }
-
     if (splittedUrl[1]) {
-      this.selectedCategory = splittedUrl[1].replaceAll("%20", " ");
+      this.selectedCategory = splittedUrl[1].replaceAll(" ", " ");
     }
     db.collection("products")
       .get()
@@ -213,6 +214,7 @@ export default {
         console.log("Error getting documents: ", error);
       });
   },
+  components: { SideMenu },
 };
 </script>
 
@@ -258,6 +260,7 @@ export default {
   background-color: #fff;
   color: #000;
   padding: 5%;
+  z-index: 0;
 }
 .justify-end {
   justify-content: space-around !important;
@@ -272,6 +275,14 @@ export default {
   color: #f78250;
   font-weight: 900;
   padding-left: 2%;
+}
+.q-gutter-md {
+  display: flex;
+  justify-content: space-between;
+}
+
+.side-menu {
+  z-index: 1;
 }
 </style>
 <style lang="scss">

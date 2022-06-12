@@ -11,7 +11,11 @@
           icon="add_circle"
         />
         <q-route-tab to="/recipes" name="recipes" icon="receipt" />
-        <q-route-tab to="/profile" name="profile" icon="person" />
+        <q-route-tab
+          to="/checklist"
+          name="list-ol"
+          icon="fa-solid fa-list-check"
+        />
       </q-tabs>
     </q-footer>
     <q-page-container>

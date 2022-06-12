@@ -5,6 +5,7 @@
         <q-header>
           <div class="q-pa-md">
             <div class="q-gutter-md">
+              <SideMenu></SideMenu>
               <img src="../assets/Logo.svg" />
             </div>
           </div>
@@ -27,6 +28,7 @@
 </template>
 <script>
 import firebaseConfig from "../firebase";
+import SideMenu from "src/components/SideMenu.vue";
 const db = firebaseConfig.db;
 
 export default {
@@ -38,47 +40,47 @@ export default {
   setup() {
     let frozenProdSVG = (
       <span style="color:#f99e77">
-        <i class="fa-solid fa-ice-cream"></i>
+        <i class="fa-solid fa-ice-cream" name="frozen"></i>
       </span>
     );
     let sweetsProdSVG = (
       <span style="color:#f99e77">
-        <i class="fa-solid fa-cake-candles"></i>
+        <i class="fa-solid fa-cake-candles" name="sweets"></i>
       </span>
     );
     let meatProdSVG = (
       <span style="color:#f99e77">
-        <i class="fa-solid fa-drumstick"></i>
+        <i class="fa-solid fa-drumstick" name="meat"></i>
       </span>
     );
     let bakeryProdSVG = (
       <span style="color:#f99e77">
-        <i class="fa-solid fa-bread-slice"></i>
+        <i class="fa-solid fa-bread-slice" name="bakery"></i>
       </span>
     );
     let dairyProdSVG = (
       <span style="color:#f99e77">
-        <i class="fa-solid fa-cheese"></i>
+        <i class="fa-solid fa-cheese" name="dairy"></i>
       </span>
     );
     let beveragesProdSVG = (
       <span style="color:#f99e77">
-        <i class="fa-solid fa-wine-bottle"></i>
+        <i class="fa-solid fa-wine-bottle" name="beverage"></i>
       </span>
     );
     let otherProdSVG = (
       <span style="color:#f99e77">
-        <i class="fa-solid fa-pizza-slice"></i>
+        <i class="fa-solid fa-pizza-slice" name="other"></i>
       </span>
     );
     let fruitsProdSVG = (
       <span style="color:#f99e77">
-        <i class="fa-solid fa-apple-whole"></i>
+        <i class="fa-solid fa-apple-whole" name="other"></i>
       </span>
     );
     let vegetablesProdSVG = (
       <span style="color:#f99e77">
-        <i class="fa-solid fa-carrot"></i>
+        <i class="fa-solid fa-carrot" name="vegetables"></i>
       </span>
     );
     return {
@@ -150,6 +152,7 @@ export default {
     this.readProducts();
     console.log(this.productsData);
   },
+  components: { SideMenu },
 };
 </script>
 <style lang="scss" scoped>
@@ -164,6 +167,10 @@ export default {
   margin-right: 5%;
   border-color: transparent;
   box-shadow: none;
+}
+.q-gutter-md {
+  display: flex;
+  justify-content: space-between;
 }
 </style>
 <style>

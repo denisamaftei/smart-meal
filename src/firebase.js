@@ -21,6 +21,7 @@ const db = firebase.firestore();
 // collection references
 const categoriesCollection = db.collection("categories");
 const productsCollection = db.collection("products");
+const itemsCollection = db.collection("items");
 
 export default { projectAuth, db, productsCollection };
 

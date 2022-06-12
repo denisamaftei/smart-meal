@@ -6,6 +6,7 @@
         <q-header>
           <div class="q-pa-md">
             <div class="q-gutter-md">
+              <SideMenu></SideMenu>
               <img src="../assets/Logo.svg" />
             </div>
           </div>
@@ -45,48 +46,27 @@
 
           <!-- </span> -->
         </div>
-        <q-expansion-item>
-          <template v-slot:header>
-            <q-item-section class="input-title"> Breakfast </q-item-section>
-
-            <q-item-section side>
-              <div class="row items-center input-title">Ingredients</div>
-            </q-item-section>
-          </template>
-
-          <q-card v-for="recipe in recipes" :key="recipe.id">
-            <q-card-section>
-              <div class="recipe-container">
-                <div class="recipe-presentation">
-                  <div class="recipe-name">
-                    {{ recipe.title }}
-                  </div>
-                  <img class="recipe-img" :src="recipe.image" />
+        <q-card v-for="recipe in recipes" :key="recipe.id">
+          <q-card-section>
+            <div class="recipe-container">
+              <div class="recipe-presentation">
+                <div class="recipe-name">
+                  {{ recipe.title }}
                 </div>
-                <div class="recipe-ingredients">
-                  <span
-                    v-for="ingredient in recipe.missedIngredients.slice(0, 5)"
-                    :key="ingredient.id"
-                    class="ingredients-list"
-                  >
-                    {{ ingredient.name }},
-                  </span>
-                </div>
+                <img class="recipe-img" :src="recipe.image" />
               </div>
-            </q-card-section>
-          </q-card>
-        </q-expansion-item>
-        <q-separator color="secondary" inset />
-        <q-expansion-item>
-          <template v-slot:header>
-            <q-item-section class="input-title"> Brunch </q-item-section>
-
-            <q-item-section side>
-              <div class="row items-center input-title">Ingredients</div>
-            </q-item-section>
-          </template>
-        </q-expansion-item>
-        <q-separator color="secondary" inset />
+              <div class="recipe-ingredients">
+                <span
+                  v-for="ingredient in recipe.missedIngredients.slice(0, 5)"
+                  :key="ingredient.id"
+                  class="ingredients-list"
+                >
+                  {{ ingredient.name }},
+                </span>
+              </div>
+            </div>
+          </q-card-section>
+        </q-card>
       </q-layout>
     </div>
   </q-page-container>
@@ -95,6 +75,8 @@
 import { useRecipesStore } from "../stores/recipesStore";
 import { ref } from "vue";
 import firebaseConfig from "../firebase";
+import SideMenu from "src/components/SideMenu.vue";
+
 const db = firebaseConfig.db;
 
 let productsData = [];
@@ -220,7 +202,6 @@ export default {
     // this.getRecipesInfo();
     this.readProducts();
     console.log("before");
-    let noIngredients = "";
     this.$watch(
       () => {
         return this.model;
@@ -233,6 +214,11 @@ export default {
 
     // console.log(this.recipesData);
   },
+  components: { SideMenu },
+  // beforeMount() {
+  //   let noIngredients = "";
+  //   this.getRecipesBySelectedIngredients(noIngredients);
+  // },
 };
 </script>
 
@@ -322,6 +308,13 @@ export default {
   font-size: 30px;
   width: 100%;
   color: #f78250;
+}
+.q-card {
+  box-shadow: none;
+}
+.q-gutter-md {
+  display: flex;
+  justify-content: space-between;
 }
 </style>
 <style lang="scss">

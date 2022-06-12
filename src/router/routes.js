@@ -32,8 +32,8 @@ const routes = [
         },
       },
       {
-        path: "/profile",
-        component: () => import("pages/UserProfile.vue"),
+        path: "/checklist",
+        component: () => import("src/pages/ChecklistPage.vue"),
         meta: {
           authRequired: true,
         },
