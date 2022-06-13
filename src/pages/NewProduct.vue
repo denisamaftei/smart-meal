@@ -100,8 +100,8 @@ export default {
           icon: "fa-solid fa-ice-cream",
         },
         {
-          label: "Sweets & Snacks",
-          value: "Sweets & Snacks",
+          label: "Snack Products",
+          value: "Snack Products",
           icon: "fa-solid fa-cake-candles",
         },
         {

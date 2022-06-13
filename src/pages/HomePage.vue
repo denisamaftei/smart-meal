@@ -12,96 +12,107 @@
       </q-header>
 
       <div class="page-title">Your Fridge</div>
-      <div class="fridge-container">
-        <img class="fridge-svg" src="../assets/Fridge.svg" />
-        <span class="freezer-container products-container">
-          <q-btn class="products-btn" @click="handleClick(categoriesData[3])">
-            <div>
-              <img class="frozenProd-svg" src="../assets/FrozenProducts.svg" />
-            </div>
-            <div class="products-category">
-              {{ categoriesData[3] }}
-            </div>
-          </q-btn>
-        </span>
-        <span class="topLevel-container">
-          <div
-            class="products-container"
-            @click="handleClick(categoriesData[4])"
-          >
-            <img src="../assets/Sweets.svg" />
-            <div class="products-category">
-              {{ categoriesData[4] }}
-            </div>
+      <div class="entire-fridge-container">
+        <div class="fridge-container">
+          <img class="fridge-svg" src="../assets/Fridge.svg" />
+          <div class="categories-container">
+            <span class="freezer-container products-container">
+              <q-btn
+                class="products-btn"
+                @click="handleClick(categoriesData[3])"
+              >
+                <div>
+                  <img
+                    class="frozenProd-svg"
+                    src="../assets/FrozenProducts.svg"
+                  />
+                </div>
+
+                <div class="products-category">
+                  {{ categoriesData[3] }}
+                </div>
+              </q-btn>
+            </span>
+            <span class="topLevel-container">
+              <div
+                class="products-container"
+                @click="handleClick(categoriesData[4])"
+              >
+                <img src="../assets/Sweets.svg" />
+                <div class="products-category">
+                  {{ categoriesData[4] }}
+                </div>
+              </div>
+              <div class="products-container">
+                <img src="../assets/MeatProducts.svg" />
+                <div
+                  class="products-category"
+                  @click="handleClick(categoriesData[6])"
+                >
+                  {{ categoriesData[6] }}
+                </div>
+              </div>
+              <div class="products-container">
+                <img src="../assets/Drinks.svg" />
+                <div
+                  class="products-category"
+                  @click="handleClick(categoriesData[7])"
+                >
+                  {{ categoriesData[7] }}
+                </div>
+              </div>
+            </span>
+            <span class="middleLevel-container">
+              <div class="products-container">
+                <img src="../assets/Dairy.svg" />
+                <div
+                  class="products-category"
+                  @click="handleClick(categoriesData[1])"
+                >
+                  {{ categoriesData[1] }}
+                </div>
+              </div>
+              <div class="products-container">
+                <img src="../assets/Bakery.svg" />
+                <div
+                  class="products-category"
+                  @click="handleClick(categoriesData[0])"
+                >
+                  {{ categoriesData[0] }}
+                </div>
+              </div>
+              <div class="products-container">
+                <img src="../assets/Other.svg" />
+                <div
+                  class="products-category other-category"
+                  @click="handleClick(categoriesData[5])"
+                >
+                  {{ categoriesData[5] }}
+                </div>
+              </div>
+            </span>
+            <span class="bottomLevel-container">
+              <div class="products-container">
+                <img src="../assets/Fruits.svg" />
+                <div
+                  class="products-category"
+                  @click="handleClick(categoriesData[2])"
+                >
+                  {{ categoriesData[2] }}
+                </div>
+              </div>
+              <div class="products-container">
+                <img src="../assets/Vegetables.svg" />
+                <div
+                  class="products-category"
+                  @click="handleClick(categoriesData[8])"
+                >
+                  {{ categoriesData[8] }}
+                </div>
+              </div>
+            </span>
           </div>
-          <div class="products-container">
-            <img src="../assets/MeatProducts.svg" />
-            <div
-              class="products-category"
-              @click="handleClick(categoriesData[6])"
-            >
-              {{ categoriesData[6] }}
-            </div>
-          </div>
-          <div class="products-container">
-            <img src="../assets/Drinks.svg" />
-            <div
-              class="products-category"
-              @click="handleClick(categoriesData[7])"
-            >
-              {{ categoriesData[7] }}
-            </div>
-          </div>
-        </span>
-        <span class="middleLevel-container">
-          <div class="products-container">
-            <img src="../assets/Dairy.svg" />
-            <div
-              class="products-category"
-              @click="handleClick(categoriesData[1])"
-            >
-              {{ categoriesData[1] }}
-            </div>
-          </div>
-          <div class="products-container">
-            <img src="../assets/Bakery.svg" />
-            <div
-              class="products-category"
-              @click="handleClick(categoriesData[0])"
-            >
-              {{ categoriesData[0] }}
-            </div>
-          </div>
-          <div class="products-container">
-            <img src="../assets/Other.svg" />
-            <div
-              class="products-category other-category"
-              @click="handleClick(categoriesData[5])"
-            >
-              {{ categoriesData[5] }}
-            </div>
-          </div>
-        </span>
-        <span class="bottomLevel-container">
-          <div class="products-container">
-            <img src="../assets/Fruits.svg" />
-            <div
-              class="products-category"
-              @click="handleClick(categoriesData[2])"
-            >
-              {{ categoriesData[2] }}
-            </div>
-          </div>
-          <div class="products-container">
-            <img src="../assets/Vegetables.svg" />
-            <div
-              class="products-category"
-              @click="handleClick(categoriesData[8])"
-            >
-              {{ categoriesData[8] }}
-            </div>
-          </div>
-        </span>
+        </div>
       </div>
       <!-- </q-layout> -->
     </div>
@@ -223,7 +234,7 @@ export default {
 .products-category {
   text-align: center;
   width: min-content;
-  min-width: 16vw; //only on mobile
+  // min-width: 16vw; //only on mobile
 }
 
 .products-category {
@@ -258,6 +269,9 @@ export default {
 }
 .products-container {
   text-align: center;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
   .q-btn {
     all: unset;
   }
@@ -278,5 +292,39 @@ export default {
 .q-gutter-md {
   display: flex;
   justify-content: space-between;
+}
+@media only screen and (min-width: 768px) {
+  // .fridge-container {
+  //   width: 100%;
+  // }
+  // .fridge-svg {
+  //   width: 30%;
+  //   max-height: 20%;
+  // }
+  // .entire-fridge-container {
+  //   width: 100%;
+  // }
+  // .categories-container {
+  //   max-width: 100%;
+  //   position: absolute;
+  //   display: flex;
+  //   justify-content: center;
+  //   align-items: center;
+  //   flex-direction: column;
+  // }
+  // .freezer-container,
+  // .topLevel-container,
+  // .middleLevel-container,
+  // .bottomLevel-container {
+  //   position: initial;
+  //   top: 0;
+  //   left: 0;
+  // }
+  // .other-category {
+  //   position: initial;
+  // }
+  // .products-category {
+  //   min-width: 6vw;
+  // }
 }
 </style>

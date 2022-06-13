@@ -26,10 +26,10 @@
         </div>
         <div class="buttons-container">
           <ConnectButton @click="signIn()"></ConnectButton>
-          <div class="socialProfile-message">
+          <!-- <div class="socialProfile-message">
             or use one of your social profile
-          </div>
-          <div class="socialProfile-buttons">
+          </div> -->
+          <!-- <div class="socialProfile-buttons">
             <q-btn
               color="red-7"
               label="Google"
@@ -46,7 +46,7 @@
             >
               <img class="facebook-icon" src="../assets/Facebook.svg" />
             </q-btn>
-          </div>
+          </div> -->
           <div class="account">
             <q-btn class="account-btn recover-password" to="/recoverPass"
               >Forgot password?</q-btn

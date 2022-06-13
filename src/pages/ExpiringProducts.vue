@@ -113,7 +113,7 @@ export default {
               case "Frozen Products":
                 prod.category = this.frozenProdSVG;
                 break;
-              case "Sweets & Snacks":
+              case "Snack Products":
                 prod.category = this.sweetsProdSVG;
                 break;
               case "Meat Products":

@@ -20,15 +20,10 @@
               <q-popup-proxy target=".filterOff">
                 <q-banner>
                   <q-select
-                    @update:model-value="getRecipesBySelectedIngredients(model)"
                     emit-value
-                    clearable
                     behavior="menu"
                     label="Select ingredients"
                     v-model="model"
-                    use-input
-                    use-chips
-                    multiple
                     input-debounce="0"
                     @new-value="createValue"
                     :options="filterOptions"
@@ -48,27 +43,36 @@
           <!-- </span> -->
         </div>
 
-        <!-- <q-card v-for="recipe in recipes" :key="recipe.id">
-          <q-card-section>
-            <div class="recipe-container">
-              <div class="recipe-presentation">
-                <div class="recipe-name">
-                  {{ recipe.title }}
+        <q-card v-for="recipe in recipes" :key="recipe.id">
+          <a :href="recipe.sourceUrl" class="recipe-url">
+            <q-card-section>
+              <div class="recipe-container">
+                <div class="recipe-presentation">
+                  <div class="recipe-name">
+                    {{ recipe.title }}
+                  </div>
+                  <img class="recipe-img" :src="recipe.image" />
                 </div>
-                <img class="recipe-img" :src="recipe.image" />
+                <div class="recipe-ingredients">
+                  <span
+                    v-for="ingredient in recipe.missedIngredients.slice(0, 5)"
+                    :key="ingredient.id"
+                    class="ingredients-list"
+                  >
+                    {{ ingredient.name }},
+                  </span>
+                </div>
               </div>
-              <div class="recipe-ingredients">
-                <span
-                  v-for="ingredient in recipe.missedIngredients.slice(0, 5)"
-                  :key="ingredient.id"
-                  class="ingredients-list"
-                >
-                  {{ ingredient.name }},
-                </span>
-              </div>
-            </div>
-          </q-card-section>
-        </q-card> -->
+            </q-card-section>
+          </a>
+        </q-card>
+        <div v-if="!recipes.length" class="no-tasks">
+          <q-icon name="fa-solid fa-gears" size="100px" color="primary">
+          </q-icon>
+          <div class="text-h5 text-primary text-center">
+            First, tell us by which ingredient to filter your recipes.
+          </div>
+        </div>
       </q-layout>
     </div>
   </q-page-container>
@@ -90,7 +94,7 @@ export default {
   setup() {
     return {
       filterOptions,
-      getRecipes: recipesStore.getRecipes,
+      // getRecipes: recipesStore.getRecipes,
       getRecipesByIngredients: recipesStore.getRecipesByIngredients,
       createValue(val, done) {
         // Calling done(var) when new-value-mode is not set or is "add", or done(var, "add") adds "var" content to the model
@@ -161,30 +165,32 @@ export default {
     };
   },
   methods: {
-    async getRecipesInfo() {
-      let response = await this.getRecipes();
-
-      for (let i = 0; i < response.length; i++) {
-        this.recipes = [
-          { key: response[i].title, value: response[i].missedIngredients },
-        ];
-      }
-
-      console.log(this.recipes);
-      return this.recipes;
-    },
-    // async getRecipesBySelectedIngredients(userSelection) {
-    //   if (userSelection == null) {
-    //     userSelection = "";
+    // async getRecipesInfo() {
+    //   let response = this.getRecipes();
+    //   this.recipes = await this.getRecipes();
+    //   for (let i = 0; i < response.length; i++) {
+    //     this.recipes = [
+    //       { key: response[i].title, value: response[i].missedIngredients },
+    //     ];
     //   }
-    //   this.recipes = "";
-    //   console.log(userSelection.toString().toLowerCase());
-    //   this.recipes = await this.getRecipesByIngredients(
-    //     userSelection.toString().toLowerCase()
-    //   );
+
     //   console.log(this.recipes);
     //   return this.recipes;
     // },
+    async getRecipesBySelectedIngredients(userSelection) {
+      // if (userSelection == null) {
+      //   userSelection = "";
+      // }
+      if (userSelection) {
+        this.recipes = "";
+        console.log(userSelection.toString().toLowerCase());
+        this.recipes = await this.getRecipesByIngredients(
+          userSelection.toString().toLowerCase()
+        );
+        console.log(this.recipes);
+        return this.recipes;
+      }
+    },
     readProducts() {
       db.collection("products")
         .get()
@@ -217,19 +223,19 @@ export default {
     // console.log(this.recipesData);
   },
   beforeMount() {
-    this.getRecipesInfo();
+    // this.getRecipesInfo();
 
     if (productsData.length == 0) {
       this.readProducts();
     }
-    // this.$watch(
-    //   () => {
-    //     return this.model;
-    //   },
-    //   (newVal, oldVal) => {
-    //     this.getRecipesBySelectedIngredients(newVal);
-    //   }
-    // );
+    this.$watch(
+      () => {
+        return this.model;
+      },
+      (newVal, oldVal) => {
+        this.getRecipesBySelectedIngredients(newVal);
+      }
+    );
   },
 };
 </script>
@@ -327,6 +333,20 @@ export default {
 }
 .q-card {
   box-shadow: none;
+}
+.recipe-url {
+  text-decoration: none;
+  color: #000;
+  cursor: pointer;
+}
+.no-tasks {
+  opacity: 0.5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: inherit;
+  margin-top: 20vh;
 }
 </style>
 <style lang="scss">

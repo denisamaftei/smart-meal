@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import Axios from "axios";
 
 const api =
-  "https://api.spoonacular.com/recipes/complexSearch?apiKey=deac22e3e329404f94320f21bba37022&number=1&fillIngredients=true";
+  "https://api.spoonacular.com/recipes/complexSearch?number=1&fillIngredients=true&addRecipeInformation=true&apiKey=e6a15b89c3dc47d0b3df5cfa8b568ed9";
 
 export const useRecipesStore = defineStore("recipes", {
   state: () => ({
