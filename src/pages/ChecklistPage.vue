@@ -13,58 +13,61 @@
         <div class="add-section-title">
           <div class="page-title">Checklist</div>
         </div>
-
-        <q-input
-          v-model="newTask"
-          @keyup.enter="addTask()"
-          class="col"
-          square
-          filled
-          bg-color="white"
-          placeholder="Type what do you want to buy"
-          dense
-        >
-          <template v-slot:append>
-            <q-btn
-              @click="addTask()"
-              round
+        <div class="flex-center">
+          <div class="checklist-container">
+            <q-input
+              v-model="newTask"
+              @keyup.enter="addTask()"
+              class="col"
+              square
+              filled
+              bg-color="white"
+              placeholder="Type what do you want to buy"
               dense
-              flat
-              icon="add"
-              class="add-icon"
-            />
-          </template>
-        </q-input>
+            >
+              <template v-slot:append>
+                <q-btn
+                  @click="addTask()"
+                  round
+                  dense
+                  flat
+                  icon="add"
+                  class="add-icon"
+                />
+              </template>
+            </q-input>
 
-        <q-item
-          v-for="task in tasks"
-          :key="task.uid"
-          @click="
-            updateDoneState(task.id, !task.done), (task.done = !task.done)
-          "
-          clickable
-        >
-          <q-item-section avatar>
-            <q-checkbox
-              v-model="task.done"
-              class="no-pointer-events"
-              color="primary"
-            />
-          </q-item-section>
-          <q-item-section :class="{ 'cut-text': task.done }">
-            {{ task.title }}
-          </q-item-section>
-          <q-item-section v-if="task.done" side>
-            <q-btn
-              @click.stop="deleteTask(task.id)"
-              flat
-              round
-              dense
-              color="primary"
-              icon="delete"
-            />
-          </q-item-section>
-        </q-item>
+            <q-item
+              v-for="task in tasks"
+              :key="task.uid"
+              @click="
+                updateDoneState(task.id, !task.done), (task.done = !task.done)
+              "
+              clickable
+            >
+              <q-item-section avatar>
+                <q-checkbox
+                  v-model="task.done"
+                  class="no-pointer-events"
+                  color="primary"
+                />
+              </q-item-section>
+              <q-item-section :class="{ 'cut-text': task.done }">
+                {{ task.title }}
+              </q-item-section>
+              <q-item-section v-if="task.done" side>
+                <q-btn
+                  @click.stop="deleteTask(task.id)"
+                  flat
+                  round
+                  dense
+                  color="primary"
+                  icon="delete"
+                />
+              </q-item-section>
+            </q-item>
+          </div>
+        </div>
         <div v-if="!tasks.length" class="no-tasks">
           <q-icon name="check" size="100px" color="primary"> </q-icon>
           <div class="text-h5 text-primary text-center">
@@ -102,7 +105,6 @@ export default {
 
   methods: {
     deleteTask(index) {
-      console.log(index);
       // this.$q
       //   .dialog({
       //     title: "Confirm",
@@ -113,12 +115,10 @@ export default {
       //     class: "dialog",
       //   })
       //   .onOk(() => {
-      console.log(index);
       db.collection("items")
         .doc(index)
         .delete()
         .then(() => {
-          console.log("Document successfully deleted!");
         })
         .catch((error) => {
           console.error("Error removing document: ", error);
@@ -128,20 +128,16 @@ export default {
       });
 
       this.tasks = newArray;
-      console.log(index);
 
       this.$q.notify("Item deleted.");
       // });
     },
     updateDoneState(taskId, taskStatus) {
-      console.log(taskId);
-      console.log(taskStatus);
 
       db.collection("items")
         .doc(taskId)
         .update({ done: taskStatus })
         .then(() => {
-          console.log("user updated!");
         });
     },
     addTask() {
@@ -159,7 +155,6 @@ export default {
           id: newId,
         })
         .then(() => {
-          console.log("Document successfully written!");
         })
         .catch((error) => {
           console.error("Error writing document: ", error);
@@ -179,11 +174,9 @@ export default {
             id: doc.id,
           });
         });
-        console.log(this.tasks);
         return this.tasks;
       })
       .catch((error) => {
-        console.log("Error getting documents: ", error);
       });
   },
   beforeMount() {
@@ -237,10 +230,20 @@ export default {
   color: #f78250;
 }
 .col {
-  background-color: #257394;
+  // background-color: #257394;
   margin-top: 2vh;
 }
 .cut-text {
   text-decoration: line-through;
+}
+@media only screen and (min-width: 768px) {
+  .checklist-container {
+    width: 50%;
+  }
+  .flex-center {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
 }
 </style>

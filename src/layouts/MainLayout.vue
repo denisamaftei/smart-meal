@@ -2,19 +2,31 @@
   <q-layout view="lHh Lpr lFf">
     <q-footer elevated>
       <q-tabs v-model="tab">
-        <q-route-tab to="/" name="home" icon="kitchen" />
-        <q-route-tab to="/expiringSoon" name="expiring" icon="warning" />
+        <q-route-tab to="/" name="home" icon="kitchen" label="Your Fridge" />
+        <q-route-tab
+          to="/expiringSoon"
+          name="expiring"
+          icon="warning"
+          label="Expiring Products"
+        />
         <q-route-tab
           to="/newProduct"
           class="add"
           name="add"
           icon="add_circle"
+          label="Add new Product"
         />
-        <q-route-tab to="/recipes" name="recipes" icon="receipt" />
+        <q-route-tab
+          to="/recipes"
+          name="recipes"
+          icon="receipt"
+          label="Recipes"
+        />
         <q-route-tab
           to="/checklist"
           name="list-ol"
           icon="fa-solid fa-list-check"
+          label="Checklist"
         />
       </q-tabs>
     </q-footer>
@@ -109,7 +121,7 @@ export default defineComponent({
   font-size: 2.7em;
 }
 .q-tabs {
-  height: 8vh;
+  /* height: 8vh; */
 }
 .add .q-tab__icon {
   font-size: 4em;
@@ -119,5 +131,22 @@ export default defineComponent({
 }
 .q-pa-md {
   padding-bottom: 5px;
+}
+.q-tab__label {
+  display: none;
+}
+@media only screen and (min-width: 768px) {
+  .q-tabs__content--align-center {
+    justify-content: space-evenly;
+    padding-top: 2vh;
+  }
+
+  .q-tab__label {
+    display: initial;
+    margin-top: 2vh;
+  }
+  .q-tabs {
+    height: 100%;
+  }
 }
 </style>

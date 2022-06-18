@@ -26,27 +26,25 @@
         </div>
         <div class="buttons-container">
           <ConnectButton @click="signIn()"></ConnectButton>
-          <!-- <div class="socialProfile-message">
-            or use one of your social profile
-          </div> -->
-          <!-- <div class="socialProfile-buttons">
+          <!-- <div class="socialProfile-message">or login using Google</div> -->
+          <div class="socialProfile-buttons">
             <q-btn
               color="red-7"
-              label="Google"
+              label="Sign in with Google"
               class="google-btn"
-              to="https://accounts.google.com/login"
+              @click="googleSignIn()"
             >
               <img class="google-icon" src="../assets/Google.svg" />
             </q-btn>
-            <q-btn
+            <!-- <q-btn
               color="blue-8"
               label="Facebook"
               class="facebook-btn"
-              to="https://www.facebook.com/login/"
+              @click="facebookSignIn()"
             >
               <img class="facebook-icon" src="../assets/Facebook.svg" />
-            </q-btn>
-          </div> -->
+            </q-btn> -->
+          </div>
           <div class="account">
             <q-btn class="account-btn recover-password" to="/recoverPass"
               >Forgot password?</q-btn
@@ -67,6 +65,7 @@ import ConnectButton from "../components/ConnectButton.vue";
 import { ref } from "vue";
 import firebaseConfig from "../firebase";
 import { useQuasar } from "quasar";
+import firebase from "firebase/compat/app";
 
 const passwordError = "";
 const emailError = "";
@@ -96,13 +95,10 @@ export default {
   },
   methods: {
     signIn() {
-      console.log("signIn");
       firebaseConfig.projectAuth
         .signInWithEmailAndPassword(this.form.email, this.form.password)
         .then((data) => {
-          console.log("Successfully LoggedIn!");
           this.$router.push("/");
-          console.log(firebaseConfig.projectAuth.currentUser);
         })
         .catch((error) => {
           switch (error.code) {
@@ -125,6 +121,32 @@ export default {
           }
         });
     },
+    googleSignIn() {
+      let provider = new firebase.auth.GoogleAuthProvider();
+      firebase
+        .auth()
+        .signInWithPopup(provider)
+        .then((result) => {
+          let token = result.credential.accessToken;
+          let user = result.user;
+          this.$router.push("/");
+        })
+        .catch((err) => {
+        });
+    },
+    // facebookSignIn() {
+    //   let provider = new firebase.auth.FacebookAuthProvider();
+    //   firebase
+    //     .auth()
+    //     .signInWithPopup(provider)
+    //     .then((result) => {
+    //       let token = result.credential.accessToken;
+    //       let user = result.user;
+    //       this.$router.push("/");
+    //     })
+    //     .catch((err) => {
+    //     });
+    // },
   },
 };
 </script>
@@ -163,6 +185,7 @@ export default {
 .socialProfile-buttons {
   display: flex;
   justify-content: space-between;
+  margin-top: 2vh;
 }
 .recover-password {
   padding-left: 0px;
@@ -186,6 +209,11 @@ export default {
 }
 .google-btn,
 .facebook-btn {
-  width: 32vw;
+  width: 100%;
+}
+@media only screen and (min-width: 768px) {
+  .google-icon {
+    margin-right: 1vw;
+  }
 }
 </style>

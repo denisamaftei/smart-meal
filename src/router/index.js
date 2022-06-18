@@ -36,19 +36,19 @@ export default route(function (/* { store, ssrContext } */) {
   });
 
   // Verify if user is loggged in, uncomment when at the end
-  // Router.beforeEach((to, from, next) => {
-  //   if (to.matched.some((record) => record.meta.authRequired)) {
-  //     if (firebaseConfig.projectAuth.currentUser) {
-  //       next();
-  //     } else {
-  //       alert("You must be logged in to see this page");
-  //       next({
-  //         path: "/login",
-  //       });
-  //     }
-  //   } else {
-  //     next();
-  //   }
-  // });
+  Router.beforeEach((to, from, next) => {
+    if (to.matched.some((record) => record.meta.authRequired)) {
+      if (firebaseConfig.projectAuth.currentUser) {
+        next();
+      } else {
+        alert("You must be logged in to see this page");
+        next({
+          path: "/login",
+        });
+      }
+    } else {
+      next();
+    }
+  });
   return Router;
 });

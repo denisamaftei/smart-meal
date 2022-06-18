@@ -37,4 +37,7 @@ export default defineComponent({
     flex-direction: column;
   }
 }
+// .q-page-container {
+//   padding-bottom: 15px !important;
+// }
 </style>

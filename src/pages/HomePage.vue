@@ -130,11 +130,9 @@ const db = firebaseConfig.db;
 //   if (!user) {
 //     // not logged in
 //     router.push("/login");
-//     console.log(user);
 
 //     alert("you must be logged in to view this. redirecting to the home page");
 //   } else {
-//     console.log(user);
 //   }
 // });
 export default {
@@ -164,12 +162,10 @@ export default {
             //   categoryName: doc.data().categoryName,
             // });
             this.categoriesData.push(doc.data().categoryName);
-            // console.log(doc.id, " => ", doc.data());
           });
           return this.categoriesData;
         })
         .catch((error) => {
-          console.log("Error getting documents: ", error);
         });
     },
     handleClick(e) {
@@ -178,7 +174,14 @@ export default {
   },
   beforeMount() {
     this.readCategories();
-    console.log(this.categoriesData);
+    if(this.categoriesData) {
+      window.OneSignal = window.OneSignal || [];
+    OneSignal.push(function() {
+      OneSignal.init({
+        appId: "189429ec-27a0-40a2-a7b6-2b82b78d5630",
+      });
+    });
+    }
   },
   components: { SideMenu },
 };
@@ -272,6 +275,7 @@ export default {
   display: flex;
   align-items: center;
   flex-direction: column;
+  cursor: pointer;
   .q-btn {
     all: unset;
   }
@@ -328,3 +332,11 @@ export default {
   // }
 }
 </style>
+<!-- <style lang="scss">
+body.desktop .q-focusable:focus > .q-focus-helper {
+  background: none !important;
+}
+.q-btn:focus {
+  background: none !important;
+}
+</style> -->

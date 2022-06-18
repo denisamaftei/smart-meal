@@ -53,14 +53,12 @@ export default {
   components: { SimpleInput, ConnectButton },
   methods: {
     submit() {
-      console.log("submit");
       // if (!this.email) {
       //   this.triggerNegative();
       // }
       firebaseConfig.projectAuth
         .sendPasswordResetEmail(this.form.email)
         .then((data) => {
-          console.log("Successfully registered!");
           this.emailSending = false;
           this.$router.push("Login");
         })

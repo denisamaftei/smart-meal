@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import Axios from "axios";
 
 const api =
-  "https://api.spoonacular.com/recipes/complexSearch?number=1&fillIngredients=true&addRecipeInformation=true&apiKey=e6a15b89c3dc47d0b3df5cfa8b568ed9";
+  "https://api.spoonacular.com/recipes/complexSearch?number=10&fillIngredients=true&addRecipeInformation=true&apiKey=e6a15b89c3dc47d0b3df5cfa8b568ed9";
 
 export const useRecipesStore = defineStore("recipes", {
   state: () => ({
@@ -22,9 +22,7 @@ export const useRecipesStore = defineStore("recipes", {
           this.recipes[i] = response.data.results[i];
         }
         return this.recipes;
-      } catch (err) {
-        console.log(err);
-      }
+      } catch (err) {}
     },
     // async getRecipeInfo() {
     //   try {
@@ -32,7 +30,6 @@ export const useRecipesStore = defineStore("recipes", {
     //     const response = await Axios.get(api + "lookup.php?i=" + { recipeId });
     //     return response.data.meals;
     //   } catch (err) {
-    //     console.log(err);
     //   }
     // },
     async getRecipesByIngredients(selectedIngredients) {
@@ -40,7 +37,6 @@ export const useRecipesStore = defineStore("recipes", {
         const response = await Axios.get(
           api + "&includeIngredients=" + selectedIngredients
         );
-        // console.log(response.data);
         for (let i = 0; i < response.data.results.length; i++) {
           this.recipes[i] = response.data.results[i];
         }
@@ -49,9 +45,7 @@ export const useRecipesStore = defineStore("recipes", {
         }
 
         return this.recipes;
-      } catch (err) {
-        console.log(err);
-      }
+      } catch (err) {}
     },
     // async filterRecipesByMainIngredients() {
     //   try {
@@ -61,7 +55,6 @@ export const useRecipesStore = defineStore("recipes", {
     //     );
     //     return response.data.meals;
     //   } catch (err) {
-    //     console.log(err);
     //   }
     // },
   },

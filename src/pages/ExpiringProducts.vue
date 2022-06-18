@@ -22,6 +22,13 @@
           @virtual-scroll="onScroll"
           hide-pagination
         />
+        <div v-if="!productsData.length" class="no-tasks">
+          <q-icon name="fa-solid fa-hourglass-end" size="100px" color="primary">
+          </q-icon>
+          <div class="text-h5 text-primary text-center">
+            No expiring product yet.
+          </div>
+        </div>
       </q-layout>
     </div>
   </q-page-container>
@@ -50,7 +57,7 @@ export default {
     );
     let meatProdSVG = (
       <span style="color:#f99e77">
-        <i class="fa-solid fa-drumstick" name="meat"></i>
+        <i class="fa-solid fa-drumstick-bite" name="meat"></i>
       </span>
     );
     let bakeryProdSVG = (
@@ -106,7 +113,6 @@ export default {
               category: doc.data().category,
               expirationDate: doc.data().expirationDate,
             });
-            // console.log(doc.id, " => ", doc.data());
           });
           this.productsData.forEach((prod) => {
             switch (prod.category) {
@@ -143,14 +149,11 @@ export default {
           });
           return this.productsData;
         })
-        .catch((error) => {
-          console.log("Error getting documents: ", error);
-        });
+        .catch((error) => {});
     },
   },
   beforeMount() {
     this.readProducts();
-    console.log(this.productsData);
   },
   components: { SideMenu },
 };
@@ -172,6 +175,15 @@ export default {
   display: flex;
   justify-content: space-between;
 }
+.no-tasks {
+  opacity: 0.5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: inherit;
+  margin-top: 20vh;
+}
 </style>
 <style>
 .q-table thead {
@@ -186,5 +198,20 @@ export default {
 }
 .q-table td {
   padding: 0;
+}
+@media only screen and (min-width: 768px) {
+  .text-left {
+    font-size: 1.25em !important;
+  }
+  .q-table tr {
+    height: 10vh;
+  }
+  .q-table__middle {
+    display: flex;
+    justify-content: center;
+  }
+  .q-table {
+    width: 50%;
+  }
 }
 </style>

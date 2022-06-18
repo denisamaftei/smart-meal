@@ -14,16 +14,21 @@
       </template>
     </q-banner>
     <div class="user-info">
-      <q-avatar class="user-avatar" color="accent" text-color="white"
-        >J</q-avatar
-      >
-      <div class="user-info-details user-name">Johnny Doe</div>
-      <div class="user-info-details user-mail">johnny@doe.com</div>
+      <q-avatar class="user-avatar" color="accent" text-color="white">{{
+        firstLetter
+      }}</q-avatar>
+      <!-- <div class="user-info-details user-name">Johnny Doe</div> -->
+      <div class="user-info-details user-mail">{{ userEmail }}</div>
     </div>
     <div class="menu-options">
       <div class="icon-text">
         <q-icon class="fas fa-cog icons" color="primary" />
         <div class="panel-text">Settings</div>
+      </div>
+      <q-separator color="secondary" />
+      <div class="icon-text">
+        <q-icon class="fa-solid fa-ban icons" color="primary" />
+        <div class="panel-text">Remove Ads</div>
       </div>
       <q-separator color="secondary" />
       <div class="icon-text">
@@ -68,6 +73,9 @@ firebaseConfig.projectAuth.onAuthStateChanged(function (user) {
 });
 
 export default {
+  data() {
+    return { userEmail: "", firstLetter: "" };
+  },
   setup() {
     const leftDrawerOpen = ref(false);
 
@@ -80,17 +88,17 @@ export default {
   },
   methods: {
     logout() {
-      console.log("logout");
       firebaseConfig.projectAuth
         .signOut()
         .then(() => {
-          console.log(firebaseConfig.projectAuth.currentUser);
           this.$router.push("/Login");
         })
-        .catch((error) => {
-          console.log(error);
-        });
+        .catch((error) => {});
     },
+  },
+  mounted() {
+    this.userEmail = firebaseConfig.projectAuth.currentUser.email;
+    this.firstLetter = this.userEmail.charAt(0).toUpperCase();
   },
 };
 </script>
@@ -134,7 +142,7 @@ export default {
   color: #000;
 }
 .user-info-details {
-  margin-top: 1vh;
+  margin-top: 4vh;
   font-size: 5vw;
 }
 .q-banner {
@@ -144,6 +152,24 @@ export default {
 .menu-options {
   margin-left: 8vw;
   margin-right: 8vw;
+}
+@media only screen and (min-width: 768px) {
+  .user-info-details {
+    font-size: 100%;
+  }
+  .icons {
+    font-size: 100%;
+  }
+  .menu-options {
+    display: flex;
+    justify-content: center;
+    /* align-items: center; */
+    flex-direction: column;
+    margin: 0;
+  }
+  .icon-text {
+    margin-left: 1vw;
+  }
 }
 </style>
 <style lang="scss">

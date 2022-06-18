@@ -25,41 +25,86 @@
             label=""
             label-color="orange"
           ></SimpleInput>
-        </div>
-        <div class="input-title">Category</div>
-        <q-select
-          behavior="menu"
-          transition-show="fade"
-          class="product-input"
-          bg-color="info"
-          clearable
-          v-model="category"
-          filled
-          :options="options"
-        >
-          <template v-slot:option="scope">
-            <q-item v-bind="scope.itemProps">
-              <q-item-section avatar>
-                <q-icon :name="scope.opt.icon" color="secondary" />
-              </q-item-section>
-              <q-item-section>
-                <q-item-label>{{ scope.opt.label }}</q-item-label>
-                <q-item-label caption>{{ scope.opt.description }}</q-item-label>
-              </q-item-section>
-            </q-item>
-          </template>
-        </q-select>
-        <div class="input-title">Expiration Date</div>
+          <div class="input-title">Category</div>
+          <q-select
+            behavior="menu"
+            transition-show="fade"
+            class="product-input"
+            bg-color="info"
+            clearable
+            v-model="category"
+            filled
+            :options="options"
+            :rules="[
+              (val) => (val && val.length > 0) || 'You must select a category ',
+            ]"
+          >
+            <template v-slot:option="scope">
+              <q-item v-bind="scope.itemProps">
+                <q-item-section avatar>
+                  <q-icon :name="scope.opt.icon" color="secondary" />
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>{{ scope.opt.label }}</q-item-label>
+                  <q-item-label caption>{{
+                    scope.opt.description
+                  }}</q-item-label>
+                </q-item-section>
+              </q-item>
+            </template>
+          </q-select>
+          <div class="input-title">Expiration Date</div>
 
-        <q-input
-          class="product-input"
-          label-color="orange"
-          bg-color="info"
-          v-model="date"
-          type="date"
-          stack-label
-          filled
-        />
+          <q-input
+            class="product-input"
+            label-color="orange"
+            bg-color="info"
+            v-model="date"
+            type="date"
+            stack-label
+            filled
+            :rules="[
+              (val) =>
+                (val && val.length > 0) ||
+                'You must insert the expiration date ',
+            ]"
+          />
+          <div class="expiration-date-info">
+            Don't forget that
+            <div
+              class="dates-info"
+              @click="!showingUseBy, (showingBestBefore = false)"
+            >
+              <q-icon class="fa-solid fa-hand-point-right" />"use by"<q-icon
+                class="fa-solid fa-hand-point-left"
+              />
+              <q-tooltip v-model="showingUseBy" :hide-delay="4000"
+                >"Use by" dates indicate when a product may no longer be safe to
+                eat.</q-tooltip
+              >
+            </div>
+            is different from
+            <div
+              class="dates-info"
+              @click="!showingBestBefore, (showingUseBy = false)"
+            >
+              <q-icon class="fa-solid fa-hand-point-right" /> "best
+              before"<q-icon class="fa-solid fa-hand-point-left" /><q-tooltip
+                v-model="showingBestBefore"
+                :hide-delay="4000"
+              >
+                "Best before" dates are an indication of quality rather than
+                safety.</q-tooltip
+              >
+            </div>
+            . Also, if you don't know the expiration date, you can find more
+            info
+            <a
+              href="https://foodshare.com/wp-content/uploads/2018/06/Food-Shelf-Life-Guide.pdf"
+              >here</a
+            >.
+          </div>
+        </div>
 
         <div class="add-container">
           <q-btn
@@ -68,7 +113,6 @@
             color="primary"
             round
             icon="check"
-            to="/"
           />
         </div>
       </q-layout>
@@ -81,14 +125,32 @@ import { ref } from "vue";
 import firebaseConfig from "../firebase";
 import { uuid } from "vue-uuid";
 import SideMenu from "src/components/SideMenu.vue";
+import { useQuasar } from "quasar";
+
+const passwordError = "";
+const emailError = "";
+const errMsg = ref();
 // const db = firebas;
 
 const db = firebaseConfig.db;
 let productsCollection = db.collection("products");
 export default {
   components: { SimpleInput, SideMenu },
+  setup() {
+    const $q = useQuasar();
+    return {
+      triggerNegative() {
+        $q.notify({
+          type: "negative",
+          message: "Please check again the info you provided.",
+        });
+      },
+    };
+  },
   data() {
     return {
+      showingUseBy: ref(false),
+      showingBestBefore: ref(false),
       name: "",
       date: "",
       category: ref(null),
@@ -149,12 +211,10 @@ export default {
               id: doc.uid,
               categoryName: doc.data().categoryName,
             });
-            console.log(doc.id, " => ", doc.data());
           });
           return this.productsData;
         })
         .catch((error) => {
-          console.log("Error getting documents: ", error);
         });
     },
     createProduct(name, expirationDate, category) {
@@ -167,19 +227,25 @@ export default {
       // splittedDate.splice(1, 0, "-"); // [10, - , 06, 2022]
       // splittedDate.splice(3, 0, "-"); // [10, - , 06, - , 2022]
       let finalDate = splittedDate.join("-");
-      db.collection("products")
-        .add({
-          expirationDate: finalDate,
-          name: name,
-          category: category,
-          uid: uuid.v1(),
-        })
-        .then(() => {
-          console.log("Document successfully written!");
-        })
-        .catch((error) => {
-          console.error("Error writing document: ", error);
-        });
+      if (name && expirationDate && category) {
+        db.collection("products")
+          .add({
+            expirationDate: finalDate,
+            name: name,
+            category: category,
+            uid: uuid.v1(),
+          })
+          .then(() => {
+
+            this.$router.push("/");
+          })
+          .catch((error) => {
+            console.error("Error writing document: ", error);
+            this.triggerNegative();
+          });
+      } else {
+        this.triggerNegative();
+      }
     },
   },
   beforeMount() {
@@ -242,6 +308,40 @@ export default {
 .q-gutter-md {
   display: flex;
   justify-content: space-between;
+}
+.dates-info {
+  display: inline;
+}
+.expiration-date-info {
+  margin-top: 3vh;
+  text-align: center;
+}
+.dates-info {
+  color: #f78250;
+  font-weight: 900;
+}
+a {
+  color: #f78250;
+}
+@media only screen and (min-width: 768px) {
+  .q-input,
+  .q-select {
+    width: 30%;
+  }
+  .inputs-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  .input-title {
+    padding-top: 2%;
+    font-weight: bold;
+    text-align: start;
+  }
+  .add-container {
+    padding-top: 3%;
+  }
 }
 </style>
 <style lang="scss">

@@ -19,10 +19,8 @@ export const useRecipesStore = defineStore("products", {
           uid: uuid.v1(),
         })
         .then(() => {
-          console.log("Document successfully written!");
         })
         .catch((error) => {
-          console.error("Error writing document: ", error);
         });
     },
     readProducts() {
@@ -37,12 +35,10 @@ export const useRecipesStore = defineStore("products", {
               expirationDate: doc.data().expirationDate,
               category: doc.data().category,
             });
-            console.log(doc.id, " => ", doc.data());
           });
           return productsData;
         })
         .catch((error) => {
-          console.log("Error getting documents: ", error);
         });
     },
     deleteProduct(id) {
@@ -50,10 +46,8 @@ export const useRecipesStore = defineStore("products", {
         .doc(id)
         .delete()
         .then(() => {
-          console.log("Document successfully deleted!");
         })
         .catch((error) => {
-          console.error("Error removing document: ", error);
         });
     },
 
@@ -67,12 +61,10 @@ export const useRecipesStore = defineStore("products", {
               id: doc.uid,
               categoryName: doc.data().categoryName,
             });
-            console.log(doc.id, " => ", doc.data());
           });
           return productsData;
         })
         .catch((error) => {
-          console.log("Error getting documents: ", error);
         });
     },
   },

@@ -13,7 +13,7 @@
       <div class="list-container">
         <div class="list-head">
           <div class="products-name">Name</div>
-          <div>Expiration Date</div>
+          <div class="expiration-date">Expiration Date</div>
         </div>
         <div>
           <q-list class="list">
@@ -79,7 +79,13 @@
           </q-list>
         </div>
       </div>
-
+      <div v-if="!productsData.length" class="no-tasks">
+        <q-icon name="fa-solid fa-cart-shopping" size="100px" color="primary">
+        </q-icon>
+        <div class="text-h5 text-primary text-center">
+          No products in this category.
+        </div>
+      </div>
       <q-footer>
         <div class="back-container">
           <q-btn round color="info" icon="arrow_back" to="/" />
@@ -139,17 +145,14 @@ export default {
     //         .doc(id)
     //         .delete()
     //         .then(() => {
-    //           console.log("Document successfully deleted!");
     //         })
     //         .catch((error) => {
     //           console.error("Error removing document: ", error);
     //         });
     //     })
     //     .onCancel(() => {
-    //       // console.log(">>>> Cancel");
     //     })
     //     .onDismiss(() => {
-    //       // console.log("I am triggered on both OK and Cancel");
     //     });
     // }
     return { dialog: ref(false), cancelEnabled: ref(false) };
@@ -160,10 +163,8 @@ export default {
       this.dialogName = name;
       this.dialogCategory = category;
       this.dialogId = id;
-      // console.log(this.dialogId);
     },
     handleDelete(id) {
-      console.log(id);
       // this.productsData.splice(id, 1);
       let newArray = this.productsData.filter((item) => !(item.id === id));
       this.productsData = newArray;
@@ -171,7 +172,6 @@ export default {
         .doc(id)
         .delete()
         .then(() => {
-          console.log("Document successfully deleted!");
         })
         .catch((error) => {
           console.error("Error removing document: ", error);
@@ -182,7 +182,6 @@ export default {
   mounted() {
     let url = "";
     url = this.$route.fullPath;
-    console.log(url);
     let splittedUrl = "";
     // if (url.includes("?=")) {
     splittedUrl = url.split("?=");
@@ -196,8 +195,6 @@ export default {
       .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-          console.log(doc.data().category);
-          console.log(this.selectedCategory);
           if (doc.data().category == this.selectedCategory) {
             this.productsData.push({
               id: doc.id,
@@ -205,20 +202,18 @@ export default {
               expirationDate: doc.data().expirationDate,
               category: doc.data().category,
             });
-            // console.log(doc.id, " => ", doc.data());
           }
         });
         return this.productsData;
       })
       .catch((error) => {
-        console.log("Error getting documents: ", error);
       });
   },
   components: { SideMenu },
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .q-header {
   background-color: #fff;
   /* box-shadow: 0 0 10px 2px rgb(0 0 0 / 20%), 0 0px 10px rgb(0 0 0 / 24%); */
@@ -283,6 +278,34 @@ export default {
 
 .side-menu {
   z-index: 1;
+}
+.no-tasks {
+  opacity: 0.5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: inherit;
+  margin-top: 20vh;
+}
+@media only screen and (min-width: 768px) {
+  .list-item {
+    width: 50%;
+    font-size: 1.5em;
+  }
+  .list-head {
+    padding-left: 26%;
+    font-size: 2em;
+  }
+  .expiration-date {
+    padding-left: 0vw;
+  }
+  .back-container {
+    font-size: 1.5vw;
+  }
+  .q-btn {
+    font-size: 1.2vw;
+  }
 }
 </style>
 <style lang="scss">

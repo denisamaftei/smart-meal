@@ -17,60 +17,82 @@
             <div class="page-title">Recipes</div>
 
             <div class="filter">
-              <q-popup-proxy target=".filterOff">
-                <q-banner>
-                  <q-select
-                    emit-value
-                    behavior="menu"
-                    label="Select ingredients"
-                    v-model="model"
-                    input-debounce="0"
-                    @new-value="createValue"
-                    :options="filterOptions"
-                    @filter="filterFn"
-                    style="width: 100%"
-                  />
-                </q-banner>
-              </q-popup-proxy>
-              <span class="filterOff">
-                <i class="filterIcon fa-solid fa-filter"> </i>
-                <div class="filter-text">Filter</div>
-              </span>
+              <q-select
+                behavior="menu"
+                class="filterOnDesktop"
+                label="Select ingredient"
+                v-model="model"
+                use-input
+                use-chips
+                input-debounce="700"
+                :options="filterOptions"
+                @filter="filterFn"
+                style="width: 100%"
+              />
+              <div class="filterOnMobile">
+                <q-popup-proxy target=".filterOff">
+                  <q-banner>
+                    <q-select
+                      behavior="menu"
+                      label="Select ingredient"
+                      v-model="model"
+                      use-input
+                      use-chips
+                      input-debounce="700"
+                      :options="filterOptions"
+                      @filter="filterFn"
+                      style="width: 100%"
+                    />
+                  </q-banner>
+                </q-popup-proxy>
+                <span class="filterOff">
+                  <i class="filterIcon fa-solid fa-filter"> </i>
+                  <div class="filter-text">Filter</div>
+                </span>
+              </div>
             </div>
           </div>
           <!-- <span style="color: #f99e77"> -->
 
           <!-- </span> -->
         </div>
-
-        <q-card v-for="recipe in recipes" :key="recipe.id">
-          <a :href="recipe.sourceUrl" class="recipe-url">
-            <q-card-section>
-              <div class="recipe-container">
-                <div class="recipe-presentation">
-                  <div class="recipe-name">
-                    {{ recipe.title }}
+        <div class="cards-container">
+          <q-card v-for="recipe in recipes" :key="recipe.id">
+            <a :href="recipe.sourceUrl" class="recipe-url">
+              <q-card-section>
+                <div class="recipe-container">
+                  <div class="recipe-presentation">
+                    <div class="recipe-name">
+                      {{ recipe.title }}
+                    </div>
+                    <img class="recipe-img" :src="recipe.image" />
                   </div>
-                  <img class="recipe-img" :src="recipe.image" />
+                  <div class="recipe-ingredients">
+                    <span
+                      v-for="ingredient in recipe.missedIngredients.slice(0, 5)"
+                      :key="ingredient.id"
+                      class="ingredients-list"
+                    >
+                      {{ ingredient.name }},
+                    </span>
+                  </div>
                 </div>
-                <div class="recipe-ingredients">
-                  <span
-                    v-for="ingredient in recipe.missedIngredients.slice(0, 5)"
-                    :key="ingredient.id"
-                    class="ingredients-list"
-                  >
-                    {{ ingredient.name }},
-                  </span>
-                </div>
-              </div>
-            </q-card-section>
-          </a>
-        </q-card>
+              </q-card-section>
+            </a>
+          </q-card>
+        </div>
         <div v-if="!recipes.length" class="no-tasks">
-          <q-icon name="fa-solid fa-gears" size="100px" color="primary">
+          <q-icon
+            name="fa-solid fa-magnifying-glass"
+            size="100px"
+            color="primary"
+          >
           </q-icon>
-          <div class="text-h5 text-primary text-center">
-            First, tell us by which ingredient to filter your recipes.
+          <div class="text-h5 text-primary text-center textOnMobile">
+            Click on Filter and select your ingredient.
+          </div>
+          <div class="text-h5 text-primary text-center textOnDesktop">
+            Type your ingredient first.
           </div>
         </div>
       </q-layout>
@@ -125,7 +147,6 @@ export default {
                 modelValue.push(v);
               }
             });
-          console.log(modelValue);
 
           done(null);
           model.value = modelValue;
@@ -146,7 +167,6 @@ export default {
           // eslint-disable-next-line vue/no-ref-as-operand
           // if (model._value != "") {
           //   // eslint-disable-next-line vue/no-ref-as-operand
-          //   console.log(model._value);
           //   filterOn.value = true;
           // } else {
           //   filterOn.value = false;
@@ -174,7 +194,6 @@ export default {
     //     ];
     //   }
 
-    //   console.log(this.recipes);
     //   return this.recipes;
     // },
     async getRecipesBySelectedIngredients(userSelection) {
@@ -183,11 +202,9 @@ export default {
       // }
       if (userSelection) {
         this.recipes = "";
-        console.log(userSelection.toString().toLowerCase());
         this.recipes = await this.getRecipesByIngredients(
           userSelection.toString().toLowerCase()
         );
-        console.log(this.recipes);
         return this.recipes;
       }
     },
@@ -197,19 +214,16 @@ export default {
         .then((querySnapshot) => {
           querySnapshot.forEach((doc) => {
             productsData.push(doc.data().name);
-            // console.log(doc.id, " => ", doc.data());
           });
           return productsData;
         })
         .catch((error) => {
-          console.log("Error getting documents: ", error);
         });
     },
     sendModelData(model) {
       // let newModel = "";
       // setTimeout(function () {
       //   newModel = model;
-      //   console.log(newModel);
       // }, 2000);
       // if (model !== null) {
       //   this.getRecipesBySelectedIngredients(model);
@@ -217,10 +231,8 @@ export default {
     },
   },
   mounted() {
-    console.log("before");
     let noIngredients = "";
 
-    // console.log(this.recipesData);
   },
   beforeMount() {
     // this.getRecipesInfo();
@@ -244,6 +256,7 @@ export default {
 .q-page-container {
   padding-top: 0 !important;
 }
+
 .sameRow-info {
   color: #f78250;
   font-size: 2.5em;
@@ -348,9 +361,74 @@ export default {
   position: inherit;
   margin-top: 20vh;
 }
+.filterOnDesktop,
+.textOnDesktop {
+  display: none;
+}
+.filterOnMobile,
+.textOnMobile {
+  display: initial;
+}
+.recipe-name {
+  font-weight: bold;
+}
+@media only screen and (min-width: 768px) {
+  .filterOff {
+    cursor: pointer;
+    font-size: 3vw;
+  }
+  .filterOnDesktop,
+  .textOnDesktop {
+    display: initial;
+  }
+  .filterOnMobile,
+  .textOnMobile {
+    display: none;
+  }
+  .ellipsis {
+    font-weight: 900 !important;
+  }
+  .filter {
+    width: 50%;
+    margin-right: 1vw;
+  }
+  .recipe-img {
+    // width: 25%;
+  }
+  .q-card {
+    // margin-left: 2vw;
+    // margin-right: 2vw;
+    // min-width: 32vw;
+    // max-width: 32vw;
+    // min-height: 25vh;
+    // max-height: 25vh;
+    width: 50%;
+    height: 100%;
+  }
+  .recipe-container {
+    min-width: 80%;
+    max-width: 80%;
+  }
+  .cards-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    flex-direction: row;
+  }
+  .q-card__section {
+    display: flex;
+    justify-content: center;
+  }
+}
 </style>
 <style lang="scss">
 .q-expansion-item .material-icons {
   color: #f78250;
+}
+@media only screen and (min-width: 768px) {
+  .ellipsis {
+    font-weight: 900 !important;
+  }
 }
 </style>

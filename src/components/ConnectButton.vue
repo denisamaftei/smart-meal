@@ -11,7 +11,6 @@
 export default {
   methods: {
     onItemClick() {
-      // console.log('Clicked on an Item')
     },
     onRejected(rejectedEntries) {
       // Notify plugin needs to be installed

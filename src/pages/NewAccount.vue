@@ -25,6 +25,7 @@
         </div>
         <div class="login-inputs">
           <SimpleInput v-model="form.email" ref="emailInput"></SimpleInput>
+
           <PasswordInput
             :rules="[
               (val) =>
@@ -35,8 +36,27 @@
           ></PasswordInput>
         </div>
         <div class="buttons-container">
-          <ConnectButton label="Continue" @click="submit()"></ConnectButton>
-          <div class="termsAndPolicy-container">
+          <ConnectButton label="Sign up" @click="submit()"></ConnectButton>
+          <!-- <div class="socialProfile-message">or use your Google account</div> -->
+          <div class="socialProfile-buttons">
+            <q-btn
+              color="red-7"
+              label="Sign up with Google"
+              class="google-btn"
+              @click="googleSignIn()"
+            >
+              <img class="google-icon" src="../assets/Google.svg" />
+            </q-btn>
+            <!-- <q-btn
+              color="blue-8"
+              label="Facebook"
+              class="facebook-btn"
+              @click="facebookSignIn()"
+            >
+              <img class="facebook-icon" src="../assets/Facebook.svg" />
+            </q-btn> -->
+          </div>
+          <!-- <div class="termsAndPolicy-container">
             <q-checkbox
               v-model="customModel"
               color="secondary"
@@ -56,7 +76,7 @@
               @click="policyAlert = true"
               >Privacy Policy</q-btn
             >.
-          </div>
+          </div> -->
 
           <div class="account">
             <q-btn class="account-btn backToSignIn" to="/login"
@@ -67,7 +87,7 @@
         </div>
       </div>
     </div>
-    <q-dialog v-model="termsAlert">
+    <!-- <q-dialog v-model="termsAlert">
       <q-card>
         <q-card-section>
           <div class="text-h6">Terms and Services</div>
@@ -102,7 +122,7 @@
           <q-btn flat label="OK" color="primary" v-close-popup />
         </q-card-actions>
       </q-card>
-    </q-dialog>
+    </q-dialog> -->
   </q-page-container>
 </template>
 <script>
@@ -112,6 +132,8 @@ import ConnectButton from "../components/ConnectButton.vue";
 import { ref } from "vue";
 import firebaseConfig from "../firebase";
 import { useQuasar } from "quasar";
+import firebase from "firebase/compat/app";
+
 export default {
   components: { SimpleInput, PasswordInput, ConnectButton },
   setup() {
@@ -123,7 +145,7 @@ export default {
       triggerNegative() {
         $q.notify({
           type: "negative",
-          message: "You must agree with the Terms and Polices",
+          message: "Please check again the info you provided.",
         });
       },
     };
@@ -133,18 +155,17 @@ export default {
       form: {
         email: "",
         password: "",
+        name: "",
       },
       error: false,
     };
   },
   methods: {
     submit() {
-      console.log("submit");
-      if (this.customModel === "yes") {
+      if (this.form.email && this.form.password && this.form.name) {
         firebaseConfig.projectAuth
           .createUserWithEmailAndPassword(this.form.email, this.form.password)
           .then((data) => {
-            console.log("Successfully registered!");
             this.$router.push("Login");
           })
           .catch((err) => {
@@ -153,6 +174,30 @@ export default {
       } else {
         this.triggerNegative();
       }
+    },
+    googleSignIn() {
+      let provider = new firebase.auth.GoogleAuthProvider();
+      firebase
+        .auth()
+        .signInWithPopup(provider)
+        .then((result) => {
+          let token = result.credential.accessToken;
+          let user = result.user;
+          this.$router.push("Login");
+        })
+        .catch((err) => {});
+    },
+    facebookSignIn() {
+      let provider = new firebase.auth.FacebookAuthProvider();
+      firebase
+        .auth()
+        .signInWithPopup(provider)
+        .then((result) => {
+          let token = result.credential.accessToken;
+          let user = result.user;
+          this.$router.push("/");
+        })
+        .catch((err) => {});
     },
   },
 };
@@ -206,14 +251,39 @@ export default {
   padding-bottom: 0.2vh;
 }
 
-.q-btn:before {
-  box-shadow: none;
-}
 .q-btn--actionable.q-btn--standard:before {
   transition: none;
 }
 .account-question {
   color: rgba(0, 0, 0, 0.55);
   margin-right: 1vw;
+}
+.socialProfile-message {
+  display: flex;
+  justify-content: center;
+  padding: 2vh 0vh 2vh 0vh;
+  color: rgba(0, 0, 0, 0.55);
+}
+.socialProfile-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2vh;
+}
+.google-icon,
+.facebook-icon {
+  order: -1;
+  margin-right: 3vw;
+}
+.facebook-btn {
+  margin-left: 10vw;
+}
+.google-btn,
+.facebook-btn {
+  width: 100%;
+}
+@media only screen and (min-width: 768px) {
+  .google-icon {
+    margin-right: 1vw;
+  }
 }
 </style>
