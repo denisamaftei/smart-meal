@@ -48,6 +48,13 @@ const routes = [
     },
   },
   {
+    path: "/settings",
+    component: () => import("src/pages/SettingsPage.vue"),
+    meta: {
+      authRequired: true,
+    },
+  },
+  {
     path: "/auth",
     component: () => import("layouts/AuthLayout.vue"),
     children: [

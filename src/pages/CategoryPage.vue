@@ -62,20 +62,6 @@
                 </q-card-actions>
               </q-card>
             </q-dialog>
-            <!-- <q-item clickable v-ripple class="list-item">
-              <q-item-section class="product-name">Chicken</q-item-section>
-              <q-item-section>20/12/2021</q-item-section>
-              <q-item-section @click="alert()" avatar>
-                <q-icon color="black" name="disabled_by_default" />
-              </q-item-section>
-            </q-item>
-            <q-item clickable v-ripple class="list-item">
-              <q-item-section class="product-name">Spinach</q-item-section>
-              <q-item-section>20/12/2021</q-item-section>
-              <q-item-section @click="alert()" avatar>
-                <q-icon color="black" name="disabled_by_default" />
-              </q-item-section>
-            </q-item> -->
           </q-list>
         </div>
       </div>
@@ -116,45 +102,6 @@ export default {
     };
   },
   setup() {
-    // const splittedUrl = window.location.href.split("?=");
-    // const selectedCategory = splittedUrl[1].replaceAll(" ", " ");
-    // const $q = useQuasar();
-    // // const test = "Fish";
-    // const productToBeDeleted = dataForSetup;
-    // const message =
-    //   '<span class="dialog">Are you sure you wanna delete this?</span>';
-    // function alert() {
-    //   $q.dialog({
-    //     title: "",
-    //     message: message,
-    //     style: "border-radius:10px;",
-    //     align: "center",
-    //     html: true,
-    //     ok: {
-    //       push: true,
-    //       label: "delete",
-    //     },
-    //     cancel: {
-    //       push: true,
-    //       color: "negative",
-    //     },
-    //     persistent: true,
-    //   })
-    //     .onOk((id) => {
-    //       db.collection("products")
-    //         .doc(id)
-    //         .delete()
-    //         .then(() => {
-    //         })
-    //         .catch((error) => {
-    //           console.error("Error removing document: ", error);
-    //         });
-    //     })
-    //     .onCancel(() => {
-    //     })
-    //     .onDismiss(() => {
-    //     });
-    // }
     return { dialog: ref(false), cancelEnabled: ref(false) };
   },
   methods: {
@@ -171,8 +118,7 @@ export default {
       db.collection("products")
         .doc(id)
         .delete()
-        .then(() => {
-        })
+        .then(() => {})
         .catch((error) => {
           console.error("Error removing document: ", error);
         });
@@ -206,8 +152,7 @@ export default {
         });
         return this.productsData;
       })
-      .catch((error) => {
-      });
+      .catch((error) => {});
   },
   components: { SideMenu },
 };

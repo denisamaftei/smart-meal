@@ -58,7 +58,7 @@
         </div>
         <div class="cards-container">
           <q-card v-for="recipe in recipes" :key="recipe.id">
-            <a :href="recipe.sourceUrl" class="recipe-url">
+            <a :href="recipe.sourceUrl" class="recipe-url" target="_blank">
               <q-card-section>
                 <div class="recipe-container">
                   <div class="recipe-presentation">
@@ -217,8 +217,7 @@ export default {
           });
           return productsData;
         })
-        .catch((error) => {
-        });
+        .catch((error) => {});
     },
     sendModelData(model) {
       // let newModel = "";
@@ -232,7 +231,6 @@ export default {
   },
   mounted() {
     let noIngredients = "";
-
   },
   beforeMount() {
     // this.getRecipesInfo();

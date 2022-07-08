@@ -37,7 +37,6 @@
         </div>
         <div class="buttons-container">
           <ConnectButton label="Sign up" @click="submit()"></ConnectButton>
-          <!-- <div class="socialProfile-message">or use your Google account</div> -->
           <div class="socialProfile-buttons">
             <q-btn
               color="red-7"
@@ -47,37 +46,7 @@
             >
               <img class="google-icon" src="../assets/Google.svg" />
             </q-btn>
-            <!-- <q-btn
-              color="blue-8"
-              label="Facebook"
-              class="facebook-btn"
-              @click="facebookSignIn()"
-            >
-              <img class="facebook-icon" src="../assets/Facebook.svg" />
-            </q-btn> -->
           </div>
-          <!-- <div class="termsAndPolicy-container">
-            <q-checkbox
-              v-model="customModel"
-              color="secondary"
-              true-value="yes"
-              false-value="no"
-              class="termsAndPolicy-checkbox"
-            />
-            I agree to the
-            <q-btn
-              class="termsAndPolicy-btn termsAndPolicy"
-              @click="termsAlert = true"
-              >Terms of Services</q-btn
-            ><br />
-            and
-            <q-btn
-              class="termsAndPolicy-btn termsAndPolicy"
-              @click="policyAlert = true"
-              >Privacy Policy</q-btn
-            >.
-          </div> -->
-
           <div class="account">
             <q-btn class="account-btn backToSignIn" to="/login"
               ><span class="account-question">Have an account?</span> Sign
@@ -87,42 +56,6 @@
         </div>
       </div>
     </div>
-    <!-- <q-dialog v-model="termsAlert">
-      <q-card>
-        <q-card-section>
-          <div class="text-h6">Terms and Services</div>
-        </q-card-section>
-
-        <q-card-section class="q-pt-none">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum
-          repellendus sit voluptate voluptas eveniet porro. Rerum blanditiis
-          perferendis totam, ea at omnis vel numquam exercitationem aut, natus
-          minima, porro labore.
-        </q-card-section>
-
-        <q-card-actions align="right">
-          <q-btn flat label="OK" color="primary" v-close-popup />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
-    <q-dialog v-model="policyAlert">
-      <q-card>
-        <q-card-section>
-          <div class="text-h6">Privacy Policy</div>
-        </q-card-section>
-
-        <q-card-section class="q-pt-none">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum
-          repellendus sit voluptate voluptas eveniet porro. Rerum blanditiis
-          perferendis totam, ea at omnis vel numquam exercitationem aut, natus
-          minima, porro labore.
-        </q-card-section>
-
-        <q-card-actions align="right">
-          <q-btn flat label="OK" color="primary" v-close-popup />
-        </q-card-actions>
-      </q-card>
-    </q-dialog> -->
   </q-page-container>
 </template>
 <script>
@@ -146,6 +79,12 @@ export default {
         $q.notify({
           type: "negative",
           message: "Please check again the info you provided.",
+        });
+      },
+      triggerPositive() {
+        $q.notify({
+          type: "positive",
+          message: "Your account has been created. You can sign in now.",
         });
       },
     };
@@ -184,6 +123,8 @@ export default {
           let token = result.credential.accessToken;
           let user = result.user;
           this.$router.push("Login");
+
+          this.triggerPositive();
         })
         .catch((err) => {});
     },
@@ -195,9 +136,12 @@ export default {
         .then((result) => {
           let token = result.credential.accessToken;
           let user = result.user;
+
           this.$router.push("/");
         })
-        .catch((err) => {});
+        .catch((err) => {
+          console.log("error");
+        });
     },
   },
 };

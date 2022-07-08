@@ -17,11 +17,10 @@
       <q-avatar class="user-avatar" color="accent" text-color="white">{{
         firstLetter
       }}</q-avatar>
-      <!-- <div class="user-info-details user-name">Johnny Doe</div> -->
       <div class="user-info-details user-mail">{{ userEmail }}</div>
     </div>
     <div class="menu-options">
-      <div class="icon-text">
+      <div class="icon-text" @click="handleSettings()">
         <q-icon class="fas fa-cog icons" color="primary" />
         <div class="panel-text">Settings</div>
       </div>
@@ -48,7 +47,14 @@
       <q-separator color="secondary" />
       <div class="icon-text">
         <q-icon class="fas fa-info icons" color="primary" />
-        <div class="panel-text">About the application</div>
+        <div class="panel-text">
+          <a
+            class="landing-page"
+            href="https://mafteidenisa17.wixsite.com/smartmeal"
+            target="_blank"
+            >About the application</a
+          >
+        </div>
       </div>
       <q-separator color="secondary" />
       <div class="icon-text log-out" @click="logout()">
@@ -94,6 +100,9 @@ export default {
           this.$router.push("/Login");
         })
         .catch((error) => {});
+    },
+    handleSettings() {
+      // this.$router.push("/settings");
     },
   },
   mounted() {
@@ -152,6 +161,10 @@ export default {
 .menu-options {
   margin-left: 8vw;
   margin-right: 8vw;
+}
+.landing-page {
+  text-decoration: none;
+  color: #000;
 }
 @media only screen and (min-width: 768px) {
   .user-info-details {

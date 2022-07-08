@@ -35,9 +35,7 @@
             v-model="category"
             filled
             :options="options"
-            :rules="[
-              (val) => (val && val.length > 0) || 'You must select a category ',
-            ]"
+            :rules="[(val) => val !== null || 'You must select a category ']"
           >
             <template v-slot:option="scope">
               <q-item v-bind="scope.itemProps">
@@ -78,7 +76,7 @@
               <q-icon class="fa-solid fa-hand-point-right" />"use by"<q-icon
                 class="fa-solid fa-hand-point-left"
               />
-              <q-tooltip v-model="showingUseBy" :hide-delay="4000"
+              <q-tooltip v-model="showingUseBy" :hide-delay="3000"
                 >"Use by" dates indicate when a product may no longer be safe to
                 eat.</q-tooltip
               >
@@ -91,7 +89,7 @@
               <q-icon class="fa-solid fa-hand-point-right" /> "best
               before"<q-icon class="fa-solid fa-hand-point-left" /><q-tooltip
                 v-model="showingBestBefore"
-                :hide-delay="4000"
+                :hide-delay="3000"
               >
                 "Best before" dates are an indication of quality rather than
                 safety.</q-tooltip
@@ -101,6 +99,7 @@
             info
             <a
               href="https://foodshare.com/wp-content/uploads/2018/06/Food-Shelf-Life-Guide.pdf"
+              target="_blank"
               >here</a
             >.
           </div>
@@ -130,7 +129,6 @@ import { useQuasar } from "quasar";
 const passwordError = "";
 const emailError = "";
 const errMsg = ref();
-// const db = firebas;
 
 const db = firebaseConfig.db;
 let productsCollection = db.collection("products");
@@ -143,6 +141,12 @@ export default {
         $q.notify({
           type: "negative",
           message: "Please check again the info you provided.",
+        });
+      },
+      triggerPositive() {
+        $q.notify({
+          type: "positive",
+          message: "You successfully added the new product.",
         });
       },
     };
@@ -214,8 +218,7 @@ export default {
           });
           return this.productsData;
         })
-        .catch((error) => {
-        });
+        .catch((error) => {});
     },
     createProduct(name, expirationDate, category) {
       let splittedDate = expirationDate.split("-"); //[2022, 06, 10]
@@ -236,13 +239,17 @@ export default {
             uid: uuid.v1(),
           })
           .then(() => {
-
             this.$router.push("/");
           })
           .catch((error) => {
             console.error("Error writing document: ", error);
             this.triggerNegative();
           });
+        this.triggerPositive();
+        window.OneSignal = window.OneSignal || [];
+        OneSignal.push(function () {
+          OneSignal.sendTag("expiration_date", finalDate.toString());
+        });
       } else {
         this.triggerNegative();
       }
