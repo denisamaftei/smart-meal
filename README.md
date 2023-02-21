@@ -1,5 +1,5 @@
 # Smart Meal
-This project is an application that helps reduce food waste by allowing users to track their food inventory and receive recipe suggestions based on their current ingredients.<br><br> The app was created using Vue.js, Quasar, and Firebase.
+This project is a Single Page Application (SPA) that helps reduce food waste by allowing users to track their food inventory and receive recipe suggestions based on their current ingredients.<br><br> The app was created using Vue.js, Quasar, and Firebase.
 
 ## Features
 The Smart Meal App includes the following features:
@@ -61,4 +61,4 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-webpack/quas
 The Smart Meal App is licensed under the MIT License - see the  [LICENSE](https://github.com/denisamaftei/smart-meal/blob/main/LICENSE) file for details.
 ## Acknowledgments
 
-This project was created as part of an effort to reduce food waste and promote sustainable living. <br><br> Special thanks to the Vue.js, Quasar, and Firebase communities for providing powerful tools and resources to build this application. <br> <br> Additionally, this application was created as part of my dissertation, and I am grateful for the support and guidance of my academic advisors throughout the development process.
+This project was created as part of an effort to reduce food waste and promote sustainable living. <br><br> Special thanks to the Vue.js, Quasar, and Firebase communities for providing powerful tools and resources to build this Single Page Application (SPA). <br> <br> Additionally, this application was created as part of my dissertation, and I am grateful for the support and guidance of my academic advisors throughout the development process.
